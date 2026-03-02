@@ -21,7 +21,7 @@ dependencies = [
     # --- Permissive licenses (should all be CLEAN) ---
     # These are the "easy" licenses — minimal restrictions, safe for any project type.
     "requests==2.31.0",          # Apache-2.0 — permissive with patent grant
-    "flask==3.0.0",              # BSD-3-Clause — permissive with non-endorsement clause
+    "flask==3.1.3",              # BSD-3-Clause — permissive with non-endorsement clause
     "click==8.1.7",              # BSD-3-Clause — permissive (same as Flask, both from Pallets)
     "pydantic==2.5.0",           # MIT — the most common permissive license
 
