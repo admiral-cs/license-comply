@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-03-02
+
+### Fixed
+
+- Move items incorrectly listed under [Unreleased] into [1.0.0] — all were already included in the published package
+
 ## [1.0.0] - 2026-03-01
 
 ### Added
@@ -44,4 +50,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pass formatted date to markdown template for human-readable dates
 - Make `--init` call `sys.exit(0)` explicitly for consistency
 
+[1.0.1]: https://github.com/admiral-cs/license-comply/releases/tag/v1.0.1
 [1.0.0]: https://github.com/admiral-cs/license-comply/releases/tag/v1.0.0

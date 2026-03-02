@@ -16,4 +16,4 @@ Usage:
 
 # The version number lives here so it's the single source of truth.
 # Other parts of the codebase (like cli.py) import it from here.
-__version__ = "1.0.0"
+__version__ = "1.0.1"

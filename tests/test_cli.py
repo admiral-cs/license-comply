@@ -56,7 +56,7 @@ class TestArgumentParsing:
             assert exc_info.value.code == 0
 
         output = capsys.readouterr().out
-        assert "1.0.0" in output
+        assert "1.0.1" in output
 
     def test_missing_project_type_shows_error(self, capsys) -> None:
         """Running without --project-type should show a helpful error."""

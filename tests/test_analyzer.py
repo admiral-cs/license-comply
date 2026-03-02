@@ -324,7 +324,7 @@ class TestScanResultMetadata:
         infos = [_make_info("pkg", "MIT", LicenseCategory.PERMISSIVE)]
         result = analyze(infos, ProjectType.PROPRIETARY, "/test")
 
-        assert result.tool_version == "1.0.0"
+        assert result.tool_version == "1.0.1"
 
     def test_findings_have_explanations(self) -> None:
         """Every finding should have a non-empty explanation and recommendation."""

@@ -21,7 +21,7 @@ build-backend = "setuptools.build_meta"
 # --- Project Metadata ---
 [project]
 name = "license-comply"
-version = "1.0.0"
+version = "1.0.1"
 description = "Open-source license compliance analysis — risk ratings, plain-English explanations, and remediation steps for your project type."
 readme = "README.md"
 license = {text = "Apache-2.0"}
