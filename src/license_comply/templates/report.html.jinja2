@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Compliance Report — {{ result.project_path }}</title>
+
+    <!-- Typography: Outfit (modern geometric display), DM Sans (body), JetBrains Mono (code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------------------------------------------------------------
+           CSS Custom Properties — Design System
+           Every color, font, and spacing value used in the report flows
+           from these variables. To re-theme the report, change them here.
+           --------------------------------------------------------------- */
+        :root {
+            /* Typography */
+            --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+
+            /* Colors — Base palette */
+            --color-ink: #0f172a;
+            --color-paper: #f8fafc;
+            --color-card: #ffffff;
+            --color-text: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+
+            /* Colors — Risk levels (vivid, impossible to miss) */
+            --color-critical: #dc2626;
+            --color-critical-bg: #fef2f2;
+            --color-critical-border: #fecaca;
+            --color-warning: #d97706;
+            --color-warning-bg: #fffbeb;
+            --color-warning-border: #fde68a;
+            --color-notice: #2563eb;
+            --color-notice-bg: #eff6ff;
+            --color-notice-border: #bfdbfe;
+            --color-clean: #16a34a;
+            --color-clean-bg: #f0fdf4;
+            --color-clean-border: #bbf7d0;
+
+            /* Spacing */
+            --container-max: 1100px;
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+
+        /* ---------------------------------------------------------------
+           CSS Reset
+           --------------------------------------------------------------- */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Base Typography
+           --------------------------------------------------------------- */
+        body {
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.65;
+            color: var(--color-text);
+            background: var(--color-paper);
+        }
+
+        code, .mono {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Container — centered content area below the hero
+           --------------------------------------------------------------- */
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: var(--space-xl) var(--space-lg);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Shared Card Style
+           White cards on the warm paper background, with subtle shadow.
+           --------------------------------------------------------------- */
+        .card {
+            background: var(--color-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--color-border-light);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Section Headings — bold modern style
+           --------------------------------------------------------------- */
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: var(--space-md);
+            scroll-margin-top: var(--space-md);
+            letter-spacing: -0.01em;
+        }
+
+        .section-count {
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-card);
+            background: var(--color-text-secondary);
+            padding: 2px 10px;
+            border-radius: 999px;
+            margin-left: var(--space-sm);
+            /* Align vertically with the section title text */
+            align-self: center;
+            line-height: 1.4;
+        }
+
+        .section-count.count-critical { background: var(--color-critical); }
+        .section-count.count-warning  { background: var(--color-warning); }
+
+        /* Ensure the section title and count sit on the same baseline */
+        .collapsible-section summary .section-title {
+            margin-bottom: 0;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Hero Header — full-bleed dark masthead
+           The first thing the reader sees. Sets the tone with bold
+           geometric typography, metadata grid, and stats panel.
+           --------------------------------------------------------------- */
+        .hero {
+            background: var(--color-ink);
+            color: #cbd5e1;
+            padding: var(--space-2xl) var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle grain texture for depth — a barely-visible noise pattern
+           that prevents the dark background from looking flat/digital */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.025em;
+            margin-bottom: var(--space-xs);
+        }
+
+        .hero-version {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-bottom: var(--space-xl);
+        }
+
+        .hero-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        /* Left column: metadata grid */
+        .hero-meta {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: var(--space-xs) var(--space-lg);
+            font-size: 0.9rem;
+        }
+
+        .hero-meta-label {
+            color: #94a3b8;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+            padding-top: 2px;
+        }
+
+        .hero-meta-value {
+            color: #e2e8f0;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        /* Right column: stats panel with big headline numbers */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-sm);
+            text-align: center;
+            min-width: 320px;
+        }
+
+        .hero-stat {
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            transition: background 0.15s ease;
+        }
+
+        .hero-stat:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-stat-number {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: var(--space-xs);
+        }
+
+        .hero-stat-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        /* Status badge — pill-shaped indicator in the hero */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            margin-top: var(--space-lg);
+        }
+
+        .status-badge.status-critical {
+            background: rgba(220, 38, 38, 0.2);
+            color: #fca5a5;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.15);
+        }
+
+        .status-badge.status-warning {
+            background: rgba(217, 119, 6, 0.2);
+            color: #fcd34d;
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.15);
+        }
+
+        .status-badge.status-clean {
+            background: rgba(22, 163, 74, 0.2);
+            color: #86efac;
+            box-shadow: 0 0 20px rgba(22, 163, 74, 0.15);
+        }
+
+        /* Summary card links — wraps hero stats so they're clickable anchors.
+           display:contents makes the <a> "invisible" to grid layout so the
+           inner .hero-stat becomes the direct grid item — fixing alignment. */
+        a.summary-card-link {
+            display: contents;
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Risk Distribution Bar
+           A thin stacked bar showing the proportion of each risk level.
+           Sits at the bottom of the hero header.
+           --------------------------------------------------------------- */
+        .risk-bar {
+            display: flex;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .bar-critical { background: var(--color-critical); }
+        .bar-warning  { background: #d97706; }
+        .bar-notice   { background: #3b82f6; }
+        .bar-clean    { background: #22c55e; }
+
+
+        /* ---------------------------------------------------------------
+           AI Executive Summary
+           A highlighted block for the optional AI-generated summary.
+           --------------------------------------------------------------- */
+        .ai-summary-card {
+            border-left: 4px solid var(--color-notice);
+            background: var(--color-notice-bg) !important;
+        }
+
+        .ai-summary-title {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-notice);
+            margin-bottom: var(--space-sm);
+        }
+
+        .ai-summary-text {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: var(--color-text);
+        }
+
+        .ai-disclaimer {
+            margin-top: var(--space-md);
+            padding-top: var(--space-sm);
+            border-top: 1px solid var(--color-border);
+            font-size: 0.82rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Overview Table — the main dependency listing
+           --------------------------------------------------------------- */
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 320px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            background: var(--color-card);
+            color: var(--color-text);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--color-notice);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        /* Magnifying glass icon via CSS pseudo-element */
+        .search-bar::before {
+            content: '\1F50D';
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.85rem;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .toggle-all {
+            padding: 8px 16px;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            background: var(--color-card);
+            color: var(--color-text-secondary);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .toggle-all:hover {
+            border-color: var(--color-text);
+            color: var(--color-text);
+            background: var(--color-border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* No results message shown when search filters everything out */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: var(--space-xl);
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        /* The data table itself */
+        .overview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .overview-table thead th {
+            text-align: left;
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .overview-table tbody td {
+            padding: 10px var(--space-md);
+            border-bottom: 1px solid var(--color-border-light);
+            vertical-align: middle;
+        }
+
+        .overview-table tbody tr {
+            transition: background 0.1s ease;
+        }
+
+        .overview-table tbody tr:hover {
+            filter: brightness(0.97);
+        }
+
+        /* Color-tinted rows — risk level is immediately obvious */
+        .overview-table tbody tr.row-critical { background: var(--color-critical-bg); }
+        .overview-table tbody tr.row-warning  { background: var(--color-warning-bg); }
+        .overview-table tbody tr.row-notice   { background: var(--color-notice-bg); }
+
+        /* Risk level dots — colored circles next to risk text */
+        .risk-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .risk-dot.dot-critical { background: var(--color-critical); }
+        .risk-dot.dot-warning  { background: var(--color-warning); }
+        .risk-dot.dot-notice   { background: var(--color-notice); }
+        .risk-dot.dot-clean    { background: var(--color-clean); }
+
+        .risk-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .risk-text.text-critical { color: var(--color-critical); }
+        .risk-text.text-warning  { color: var(--color-warning); }
+        .risk-text.text-notice   { color: var(--color-notice); }
+        .risk-text.text-clean    { color: var(--color-clean); }
+
+        /* Package name links */
+        a.pkg-link {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.15s ease;
+        }
+
+        a.pkg-link:hover {
+            border-bottom-color: var(--color-text-secondary);
+        }
+
+        /* Transitive dependency badge */
+        .badge-transitive {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            background: var(--color-border-light);
+            padding: 1px 7px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+            letter-spacing: 0.02em;
+        }
+
+        .category-label {
+            font-size: 0.82rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Clean packages collapsible section within the table */
+        .clean-divider {
+            padding: var(--space-sm) var(--space-md);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .clean-divider summary {
+            list-style: none;
+            font-weight: 500;
+        }
+
+        .clean-divider summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .clean-divider summary::before {
+            content: '\25B6';
+            display: inline-block;
+            margin-right: 6px;
+            font-size: 0.7rem;
+            transition: transform 0.2s ease;
+        }
+
+        .clean-divider[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Finding Cards — Critical and Warning issue details
+           Each card has a thick colored left border indicating severity.
+           --------------------------------------------------------------- */
+        .finding-card {
+            border-left: 4px solid transparent;
+            padding: var(--space-xl);
+            margin-bottom: var(--space-md);
+            background: var(--color-card);
+            border-radius: 4px 16px 16px 4px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border-light);
+        }
+
+        .finding-card.finding-critical {
+            border-left: 4px solid var(--color-critical);
+            background: var(--color-critical-bg);
+            border-color: var(--color-critical-border);
+            border-left-color: var(--color-critical);
+        }
+
+        .finding-card.finding-warning {
+            border-left: 4px solid var(--color-warning);
+            background: var(--color-warning-bg);
+            border-color: var(--color-warning-border);
+            border-left-color: var(--color-warning);
+        }
+
+        .finding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .finding-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        /* Risk badge pill in the top-right of finding cards */
+        .finding-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .finding-badge.badge-critical {
+            background: var(--color-critical);
+            color: #ffffff;
+        }
+
+        .finding-badge.badge-warning {
+            background: var(--color-warning);
+            color: #ffffff;
+        }
+
+        .finding-meta {
+            display: flex;
+            gap: var(--space-lg);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .finding-meta strong {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        .finding-explanation {
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: var(--color-text);
+            margin-bottom: var(--space-md);
+        }
+
+        .finding-recommendation {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            padding: var(--space-sm) var(--space-md);
+            background: var(--color-border-light);
+            border-radius: 6px;
+            margin-bottom: var(--space-md);
+        }
+
+        .finding-recommendation strong {
+            font-weight: 600;
+        }
+
+        .finding-steps {
+            margin-top: var(--space-sm);
+        }
+
+        .finding-steps p {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .finding-steps ol {
+            margin-left: var(--space-lg);
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: var(--color-text);
+        }
+
+        .finding-steps ol li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .finding-policy {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            margin-top: var(--space-sm);
+            font-style: italic;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Collapsible Sections
+           Full-width clickable header bars with clear arrow affordance
+           and hover state so they're impossible to miss.
+           --------------------------------------------------------------- */
+        .collapsible-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .collapsible-section summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            margin-bottom: var(--space-md);
+            transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+            user-select: none;
+        }
+
+        .collapsible-section summary:hover {
+            background: var(--color-border-light);
+            border-color: var(--color-text-secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .collapsible-section summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* Arrow icon — rotates when open */
+        .collapsible-section summary::after {
+            content: '';
+            margin-left: auto;
+            width: 20px;
+            height: 20px;
+            background: var(--color-text-secondary);
+            -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .collapsible-section:not([open]) summary::after {
+            transform: rotate(-90deg);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Obligations Tabs — CSS-only tab switching
+           Uses hidden radio inputs with :checked sibling selectors.
+           --------------------------------------------------------------- */
+        .tabs-bar {
+            display: flex;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-lg);
+            background: var(--color-border-light);
+            padding: 4px;
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .tabs-bar label {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .tabs-bar label:hover {
+            color: var(--color-text);
+        }
+
+        /* Hide radio inputs */
+        input[name="obligation-tab"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Active tab styling — pill style with white background */
+        #tab-by-license:checked ~ .tabs-bar label[for="tab-by-license"],
+        #tab-by-obligation:checked ~ .tabs-bar label[for="tab-by-obligation"],
+        #tab-by-package:checked ~ .tabs-bar label[for="tab-by-package"] {
+            color: var(--color-text);
+            font-weight: 600;
+            background: var(--color-card);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Tab panel visibility */
+        .tab-panel {
+            display: none;
+        }
+
+        #tab-by-license:checked ~ .panel-by-license,
+        #tab-by-obligation:checked ~ .panel-by-obligation,
+        #tab-by-package:checked ~ .panel-by-package {
+            display: block;
+        }
+
+        /* Obligation group styling */
+        .obligation-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .obligation-group-title {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: var(--space-sm);
+        }
+
+        .obligation-group-meta {
+            font-size: 0.82rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .obligation-list {
+            list-style: disc;
+            margin-left: var(--space-lg);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .obligation-list li {
+            margin-bottom: var(--space-xs);
+        }
+
+        /* By Obligation view — category groups */
+        .obligation-category-group {
+            margin-bottom: var(--space-xl);
+        }
+
+        .obligation-category-header {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-md);
+        }
+
+        .obligation-item {
+            margin-bottom: var(--space-md);
+            padding-left: var(--space-md);
+            border-left: 2px solid var(--color-border-light);
+        }
+
+        .obligation-text {
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-bottom: var(--space-xs);
+        }
+
+        .obligation-packages {
+            font-size: 0.82rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* By Package view — package groups */
+        .obligation-package-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .obligation-package-header {
+            font-family: var(--font-mono);
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-bottom: var(--space-xs);
+        }
+
+        .obligation-package-license {
+            font-size: 0.82rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Footer
+           --------------------------------------------------------------- */
+        .report-footer {
+            text-align: center;
+            padding: var(--space-xl) 0;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            border-top: 1px solid var(--color-border);
+            margin-top: var(--space-xl);
+        }
+
+        .report-footer a {
+            color: var(--color-text-secondary);
+            text-decoration: underline;
+            text-decoration-color: var(--color-border);
+            text-underline-offset: 2px;
+        }
+
+        .report-footer a:hover {
+            color: var(--color-text);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Animations — staggered page-load reveals
+           Each section fades in and slides up with increasing delay,
+           creating a polished "cascading" effect on page load.
+           --------------------------------------------------------------- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes riskBarGrow {
+            from { width: 0%; }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.5s ease-out both;
+        }
+
+        .animate-delay-1 { animation-delay: 0.08s; }
+        .animate-delay-2 { animation-delay: 0.16s; }
+        .animate-delay-3 { animation-delay: 0.24s; }
+        .animate-delay-4 { animation-delay: 0.32s; }
+        .animate-delay-5 { animation-delay: 0.40s; }
+        .animate-delay-6 { animation-delay: 0.48s; }
+        .animate-delay-7 { animation-delay: 0.56s; }
+
+        .risk-bar div {
+            animation: riskBarGrow 0.8s ease-out 0.3s both;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Print Styles
+           When printing or saving to PDF, the dark hero becomes light,
+           all sections expand, interactive elements hide, and animations
+           are disabled. The result is a clean, professional document.
+           --------------------------------------------------------------- */
+        @media print {
+            body {
+                background: #ffffff;
+                font-size: 12px;
+            }
+
+            .hero {
+                background: #ffffff !important;
+                color: var(--color-text) !important;
+                border-bottom: 2px solid var(--color-border);
+                padding: var(--space-lg);
+            }
+
+            .hero::before { display: none; }
+            .hero-title { color: var(--color-text) !important; font-size: 1.5rem; }
+            .hero-version { color: var(--color-text-secondary) !important; }
+            .hero-meta-label { color: var(--color-text-secondary) !important; }
+            .hero-meta-value { color: var(--color-text) !important; }
+            .hero-stat-number { font-size: 1.4rem; }
+            .hero-stat-label { color: var(--color-text-secondary) !important; }
+            .status-badge { border: 1px solid currentColor; background: transparent !important; }
+            .status-badge.status-critical { color: var(--color-critical) !important; }
+            .status-badge.status-warning { color: var(--color-warning) !important; }
+            .status-badge.status-clean { color: var(--color-clean) !important; }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid var(--color-border);
+                break-inside: avoid;
+            }
+
+            .finding-card {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+
+            .search-bar, .toggle-all { display: none !important; }
+
+            /* Expand all collapsible sections */
+            details { display: block; }
+            details > summary { display: none; }
+            details > *:not(summary) { display: block !important; }
+
+            /* Show all tab panels, hide tab bar */
+            .tabs-bar { display: none; }
+            .tab-panel { display: block !important; margin-bottom: var(--space-xl); }
+            .tab-panel::before {
+                content: attr(data-print-title);
+                display: block;
+                font-family: var(--font-display);
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: var(--space-md);
+                padding-bottom: var(--space-sm);
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            /* Disable animations */
+            .animate-fade-in { animation: none !important; opacity: 1 !important; transform: none !important; }
+            .risk-bar div { animation: none !important; }
+
+            .report-footer { border-top: none; }
+            .scroll-progress, .dark-mode-toggle, .back-to-top { display: none !important; }
+        }
+
+
+        /* ---------------------------------------------------------------
+           Scroll Progress Bar
+           A thin colored line at the top of the viewport that fills
+           left-to-right as the user scrolls down the page. Provides
+           a satisfying visual cue of reading progress.
+           --------------------------------------------------------------- */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-notice), #8b5cf6);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.05s linear;
+        }
+
+
+        /* ---------------------------------------------------------------
+           Dark Mode Toggle
+           A floating button that switches between light and dark themes.
+           --------------------------------------------------------------- */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #ffffff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Dark mode overrides */
+        body.dark-mode {
+            --color-paper: #0f172a;
+            --color-card: #1e293b;
+            --color-text: #e2e8f0;
+            --color-text-secondary: #94a3b8;
+            --color-border: #334155;
+            --color-border-light: #1e293b;
+            --color-critical-bg: rgba(220, 38, 38, 0.15);
+            --color-critical-border: rgba(220, 38, 38, 0.3);
+            --color-warning-bg: rgba(217, 119, 6, 0.15);
+            --color-warning-border: rgba(217, 119, 6, 0.3);
+            --color-notice-bg: rgba(37, 99, 235, 0.15);
+            --color-notice-border: rgba(37, 99, 235, 0.3);
+            --color-clean-bg: rgba(22, 163, 74, 0.1);
+            --color-clean-border: rgba(22, 163, 74, 0.3);
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .search-bar input {
+            background: var(--color-card);
+            border-color: var(--color-border);
+            color: var(--color-text);
+        }
+
+        body.dark-mode .collapsible-section summary {
+            background: var(--color-card);
+            border-color: var(--color-border);
+        }
+
+        body.dark-mode .collapsible-section summary:hover {
+            background: #334155;
+        }
+
+        body.dark-mode .finding-card {
+            border-color: var(--color-border);
+        }
+
+        body.dark-mode .overview-table tbody tr:hover {
+            filter: brightness(1.15);
+        }
+
+        body.dark-mode .tabs-bar {
+            background: #1e293b;
+        }
+
+        body.dark-mode .tabs-bar label {
+            color: var(--color-text-secondary);
+        }
+
+        body.dark-mode .collapsible-section summary::after {
+            background: var(--color-text-secondary);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Back to Top Button
+           Floating button that appears when scrolled past the hero.
+           --------------------------------------------------------------- */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            background: var(--color-card);
+            color: var(--color-text-secondary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: var(--color-text);
+        }
+
+
+        /* ---------------------------------------------------------------
+           Keyboard Shortcut Hint
+           A small toast that appears briefly when the page loads
+           to inform the user about keyboard navigation.
+           --------------------------------------------------------------- */
+        .shortcut-hint {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--color-ink);
+            color: #94a3b8;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-family: var(--font-body);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            white-space: nowrap;
+        }
+
+        .shortcut-hint.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .shortcut-hint kbd {
+            display: inline-block;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: #e2e8f0;
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll progress bar — fills as you scroll -->
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <!-- Dark mode toggle -->
+    <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode (D)">&#9790;</button>
+
+    <!-- Back to top -->
+    <button class="back-to-top" aria-label="Back to top" title="Back to top (T)">&#8593;</button>
+
+    <!-- Keyboard shortcut hint toast -->
+    <div class="shortcut-hint" aria-hidden="true">
+        Press <kbd>/</kbd> search &nbsp; <kbd>D</kbd> dark mode &nbsp; <kbd>T</kbd> top &nbsp; <kbd>E</kbd> expand all
+    </div>
+
+
+    <!-- ============================================================
+         HERO HEADER
+         Full-bleed dark masthead with editorial serif title,
+         metadata grid, stats panel, status badge, and risk bar.
+         ============================================================ -->
+    <header class="hero animate-fade-in">
+        <div class="hero-inner">
+            <h1 class="hero-title">License Compliance Report</h1>
+            <div class="hero-version">v{{ result.tool_version }}</div>
+
+            <div class="hero-layout">
+                <!-- Left: project metadata -->
+                <div class="hero-meta">
+                    <span class="hero-meta-label">Project</span>
+                    <span class="hero-meta-value">{{ result.project_path }}</span>
+
+                    <span class="hero-meta-label">Type</span>
+                    <span class="hero-meta-value">{{ result.project_type.value | title }}</span>
+
+                    <span class="hero-meta-label">Scanned</span>
+                    <span class="hero-meta-value">{{ formatted_date }}</span>
+
+                    <span class="hero-meta-label">Packages</span>
+                    <span class="hero-meta-value">
+                        {{ result.total_packages }}{% if result.transitive_count > 0 %} ({{ result.direct_count }} direct, {{ result.transitive_count }} transitive){% endif %}
+                    </span>
+                </div>
+
+                <!-- Right: risk level headline stats -->
+                <div class="hero-stats">
+                    {% if counts.get('critical', 0) > 0 %}
+                    <a href="#section-critical" class="summary-card-link">
+                    {% else %}
+                    <a href="#section-overview" class="summary-card-link">
+                    {% endif %}
+                        <div class="hero-stat">
+                            <div class="hero-stat-number" style="color: {% if counts.get('critical', 0) > 0 %}var(--color-critical){% else %}#475569{% endif %};" data-count="{{ counts.get('critical', 0) }}">{{ counts.get('critical', 0) }}</div>
+                            <div class="hero-stat-label">Critical</div>
+                        </div>
+                    </a>
+
+                    {% if counts.get('warning', 0) > 0 %}
+                    <a href="#section-warnings" class="summary-card-link">
+                    {% else %}
+                    <a href="#section-overview" class="summary-card-link">
+                    {% endif %}
+                        <div class="hero-stat">
+                            <div class="hero-stat-number" style="color: {% if counts.get('warning', 0) > 0 %}var(--color-warning){% else %}#475569{% endif %};" data-count="{{ counts.get('warning', 0) }}">{{ counts.get('warning', 0) }}</div>
+                            <div class="hero-stat-label">Warnings</div>
+                        </div>
+                    </a>
+
+                    <a href="#section-overview" class="summary-card-link">
+                        <div class="hero-stat">
+                            <div class="hero-stat-number" style="color: {% if counts.get('notice', 0) > 0 %}var(--color-notice){% else %}#475569{% endif %};" data-count="{{ counts.get('notice', 0) }}">{{ counts.get('notice', 0) }}</div>
+                            <div class="hero-stat-label">Notice</div>
+                        </div>
+                    </a>
+
+                    <a href="#section-overview" class="summary-card-link">
+                        <div class="hero-stat">
+                            <div class="hero-stat-number" style="color: {% if counts.get('clean', 0) > 0 %}var(--color-clean){% else %}#475569{% endif %};" data-count="{{ counts.get('clean', 0) }}">{{ counts.get('clean', 0) }}</div>
+                            <div class="hero-stat-label">Clean</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Status badge -->
+            {% if counts.get('critical', 0) > 0 %}
+            <span class="status-badge status-critical">Action Required</span>
+            {% elif counts.get('warning', 0) > 0 %}
+            <span class="status-badge status-warning">Warnings Found</span>
+            {% else %}
+            <span class="status-badge status-clean">All Clear</span>
+            {% endif %}
+
+            <!-- Risk distribution bar -->
+            {% set total = result.total_packages %}
+            {% if total > 0 %}
+            <div class="risk-bar" style="margin-top: var(--space-lg);">
+                {% if counts.get('critical', 0) > 0 %}
+                <div class="bar-critical" style="width: {{ (counts.get('critical', 0) / total * 100) | round(1) }}%"></div>
+                {% endif %}
+                {% if counts.get('warning', 0) > 0 %}
+                <div class="bar-warning" style="width: {{ (counts.get('warning', 0) / total * 100) | round(1) }}%"></div>
+                {% endif %}
+                {% if counts.get('notice', 0) > 0 %}
+                <div class="bar-notice" style="width: {{ (counts.get('notice', 0) / total * 100) | round(1) }}%"></div>
+                {% endif %}
+                {% if counts.get('clean', 0) > 0 %}
+                <div class="bar-clean" style="width: {{ (counts.get('clean', 0) / total * 100) | round(1) }}%"></div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+
+    <!-- ============================================================
+         CONTENT AREA
+         All content sections sit on the warm paper background.
+         ============================================================ -->
+    <div class="container">
+
+
+        <!-- ========================================================
+             AI EXECUTIVE SUMMARY (optional)
+             Only rendered if the user ran with --summary and an AI
+             provider returned a summary.
+             ======================================================== -->
+        {% if result.ai_summary %}
+        <div class="card ai-summary-card animate-fade-in animate-delay-1">
+            <div class="ai-summary-title">Executive Summary</div>
+            <div class="ai-summary-text">{{ result.ai_summary }}</div>
+            <div class="ai-disclaimer">
+                <strong>Note:</strong> This summary was generated by an AI language model.
+                It is not legal advice and has not been reviewed by an attorney.
+                Consult qualified legal counsel before making compliance decisions.
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- ========================================================
+             OVERVIEW TABLE
+             Searchable, filterable dependency listing. Non-clean
+             packages appear first; clean packages are collapsed.
+             ======================================================== -->
+        <div class="card animate-fade-in animate-delay-2" id="section-overview">
+            <div class="section-title">Overview</div>
+
+            <div class="table-toolbar">
+                <div class="search-bar">
+                    <input type="text" id="table-search" placeholder="Filter packages..." aria-label="Filter packages">
+                </div>
+                {% if critical_findings or warning_findings %}
+                <button class="toggle-all" aria-label="Toggle all sections">Collapse all</button>
+                {% endif %}
+            </div>
+
+            <table class="overview-table">
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>License</th>
+                        <th>Category</th>
+                        <th>Risk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {# Non-clean findings first, sorted by severity. Rows get color-tinted backgrounds. #}
+                    {% for finding in critical_findings + warning_findings + notice_findings %}
+                    <tr class="filterable-row row-{{ finding.risk_level.value }}">
+                        <td>
+                            {% if finding.license_info.pypi_url %}
+                            <a href="{{ finding.license_info.pypi_url }}" target="_blank" rel="noopener" class="pkg-link">{{ finding.package_name }}</a>
+                            {% else %}
+                            <span class="pkg-link">{{ finding.package_name }}</span>
+                            {% endif %}
+                            {% if finding.license_info.is_transitive %}
+                            <span class="badge-transitive">transitive</span>
+                            {% endif %}
+                        </td>
+                        <td><code>{{ finding.license_info.spdx_id or finding.license_info.declared_license or 'Unknown' }}</code></td>
+                        <td><span class="category-label">{{ finding.license_info.category.value | replace("_", " ") | title }}</span></td>
+                        <td>
+                            <span class="risk-dot dot-{{ finding.risk_level.value }}"></span>
+                            <span class="risk-text text-{{ finding.risk_level.value }}">{{ finding.risk_level.value | title }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {# Clean packages in a collapsible section #}
+            {% if clean_findings %}
+            <details class="clean-divider" id="clean-packages">
+                <summary>{{ clean_findings | length }} clean package{{ 's' if clean_findings | length != 1 else '' }}</summary>
+                <table class="overview-table">
+                    <tbody>
+                        {% for finding in clean_findings %}
+                        <tr class="filterable-row">
+                            <td>
+                                {% if finding.license_info.pypi_url %}
+                                <a href="{{ finding.license_info.pypi_url }}" target="_blank" rel="noopener" class="pkg-link">{{ finding.package_name }}</a>
+                                {% else %}
+                                <span class="pkg-link">{{ finding.package_name }}</span>
+                                {% endif %}
+                                {% if finding.license_info.is_transitive %}
+                                <span class="badge-transitive">transitive</span>
+                                {% endif %}
+                            </td>
+                            <td><code>{{ finding.license_info.spdx_id or finding.license_info.declared_license or 'Unknown' }}</code></td>
+                            <td><span class="category-label">{{ finding.license_info.category.value | replace("_", " ") | title }}</span></td>
+                            <td>
+                                <span class="risk-dot dot-clean"></span>
+                                <span class="risk-text text-clean">Clean</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </details>
+            {% endif %}
+        </div>
+
+
+        <!-- ========================================================
+             CRITICAL ISSUES
+             Detailed finding cards for critical-risk packages.
+             Open by default so the reader immediately sees problems.
+             ======================================================== -->
+        {% if critical_findings %}
+        <details class="collapsible-section animate-fade-in animate-delay-3" id="section-critical" open>
+            <summary>
+                <span class="section-title" style="color: var(--color-critical);">Critical Issues</span>
+                <span class="section-count count-critical">{{ critical_findings | length }}</span>
+            </summary>
+
+            {% for finding in critical_findings %}
+            <div class="finding-card finding-critical">
+                <div class="finding-header">
+                    <div class="finding-title">{{ finding.title }}</div>
+                    <span class="finding-badge badge-critical">Critical</span>
+                </div>
+
+                <div class="finding-meta">
+                    <span><strong>Package:</strong> {{ finding.package_name }}{% if finding.license_info.is_transitive %} <span class="badge-transitive">transitive</span>{% endif %}</span>
+                    <span><strong>License:</strong> <code>{{ finding.license_info.spdx_id or 'Unknown' }}</code></span>
+                </div>
+
+                <div class="finding-explanation">{{ finding.explanation }}</div>
+
+                <div class="finding-recommendation">
+                    <strong>Recommendation:</strong> {{ finding.recommendation }}
+                </div>
+
+                {% if finding.remediation_steps %}
+                <div class="finding-steps">
+                    <p>Next steps:</p>
+                    <ol>
+                        {% for step in finding.remediation_steps %}
+                        <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% endif %}
+
+                {% if finding.policy_violated %}
+                <div class="finding-policy">Policy: {{ finding.policy_violated }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </details>
+        {% endif %}
+
+
+        <!-- ========================================================
+             WARNINGS
+             Same card format as critical, with amber accents.
+             ======================================================== -->
+        {% if warning_findings %}
+        <details class="collapsible-section animate-fade-in animate-delay-4" id="section-warnings" open>
+            <summary>
+                <span class="section-title" style="color: var(--color-warning);">Warnings</span>
+                <span class="section-count count-warning">{{ warning_findings | length }}</span>
+            </summary>
+
+            {% for finding in warning_findings %}
+            <div class="finding-card finding-warning">
+                <div class="finding-header">
+                    <div class="finding-title">{{ finding.title }}</div>
+                    <span class="finding-badge badge-warning">Warning</span>
+                </div>
+
+                <div class="finding-meta">
+                    <span><strong>Package:</strong> {{ finding.package_name }}{% if finding.license_info.is_transitive %} <span class="badge-transitive">transitive</span>{% endif %}</span>
+                    <span><strong>License:</strong> <code>{{ finding.license_info.spdx_id or 'Unknown' }}</code></span>
+                </div>
+
+                <div class="finding-explanation">{{ finding.explanation }}</div>
+
+                <div class="finding-recommendation">
+                    <strong>Recommendation:</strong> {{ finding.recommendation }}
+                </div>
+
+                {% if finding.remediation_steps %}
+                <div class="finding-steps">
+                    <p>Next steps:</p>
+                    <ol>
+                        {% for step in finding.remediation_steps %}
+                        <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% endif %}
+
+                {% if finding.policy_violated %}
+                <div class="finding-policy">Policy: {{ finding.policy_violated }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </details>
+        {% endif %}
+
+
+        <!-- ========================================================
+             OBLIGATIONS
+             Three tabbed views of the same obligation data:
+             By License, By Obligation (category), By Package.
+             Uses CSS-only tabs via hidden radio inputs.
+             ======================================================== -->
+        {% if result.obligation_rollup %}
+        <div class="card animate-fade-in animate-delay-5" id="section-obligations">
+            <div class="section-title">Your Obligations</div>
+
+            <!-- Hidden radio inputs control which tab is active -->
+            <input type="radio" name="obligation-tab" id="tab-by-license" checked>
+            <input type="radio" name="obligation-tab" id="tab-by-obligation">
+            <input type="radio" name="obligation-tab" id="tab-by-package">
+
+            <!-- Tab bar -->
+            <div class="tabs-bar">
+                <label for="tab-by-license">By License</label>
+                <label for="tab-by-obligation">By Obligation</label>
+                <label for="tab-by-package">By Package</label>
+            </div>
+
+            <!-- Panel: By License -->
+            <div class="tab-panel panel-by-license" data-print-title="By License">
+                {% for group in obligations_by_license %}
+                <div class="obligation-group">
+                    <div class="obligation-group-title">{{ group.license_id }}</div>
+                    <div class="obligation-group-meta">Used by: {{ group.packages | join(', ') }}</div>
+                    <ul class="obligation-list">
+                        {% for obligation_text in group.obligations %}
+                        <li>{{ obligation_text }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Panel: By Obligation (categorized) -->
+            <div class="tab-panel panel-by-obligation" data-print-title="By Obligation">
+                {% for category in obligations_by_category %}
+                <div class="obligation-category-group">
+                    <div class="obligation-category-header">{{ category.category_label }}</div>
+                    {% for obligation in category.obligations %}
+                    <div class="obligation-item">
+                        <div class="obligation-text">{{ obligation.text }}</div>
+                        <div class="obligation-packages">
+                            Required by:
+                            {% for pkg in obligation.packages %}
+                            {{ pkg }} ({{ obligation.license_ids[loop.index0] }}){% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Panel: By Package -->
+            <div class="tab-panel panel-by-package" data-print-title="By Package">
+                {% for group in obligations_by_package %}
+                <div class="obligation-package-group">
+                    <div class="obligation-package-header">{{ group.package_name }}</div>
+                    <div class="obligation-package-license">License: {{ group.license_id }}</div>
+                    <ul class="obligation-list">
+                        {% for obligation_text in group.obligations %}
+                        <li>{{ obligation_text }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- ========================================================
+             FOOTER
+             ======================================================== -->
+        <footer class="report-footer animate-fade-in animate-delay-6">
+            <p>This report does not constitute legal advice.</p>
+            <p style="margin-top: var(--space-xs);">
+                Generated by <a href="https://github.com/admiral-cs/license-comply">license-comply</a>
+                v{{ result.tool_version }} on {{ formatted_date }}
+            </p>
+        </footer>
+
+    </div>
+
+
+    <!-- ============================================================
+         JAVASCRIPT
+         Vanilla JS for search filtering, expand/collapse, counting
+         animation on hero stats, and print handling.
+         ============================================================ -->
+    <script>
+        /* ---------------------------------------------------------
+           Search filter — real-time filtering of the dependency table
+           Filters both the main table and the clean packages section.
+           --------------------------------------------------------- */
+        (function() {
+            var searchInput = document.getElementById('table-search');
+            if (!searchInput) return;
+
+            var noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.textContent = 'No packages match your search.';
+            searchInput.closest('.card').appendChild(noResults);
+
+            searchInput.addEventListener('input', function() {
+                var query = this.value.toLowerCase();
+                var rows = document.querySelectorAll('.filterable-row');
+                var visibleCount = 0;
+
+                for (var i = 0; i < rows.length; i++) {
+                    var text = rows[i].textContent.toLowerCase();
+                    var visible = text.indexOf(query) !== -1;
+                    rows[i].style.display = visible ? '' : 'none';
+                    if (visible) visibleCount++;
+                }
+
+                /* Expand clean packages section when searching */
+                var cleanSection = document.getElementById('clean-packages');
+                if (cleanSection && query.length > 0) {
+                    cleanSection.open = true;
+                }
+
+                noResults.style.display = (visibleCount === 0 && query.length > 0) ? 'block' : 'none';
+            });
+        })();
+
+
+        /* ---------------------------------------------------------
+           Expand / Collapse all toggle
+           Toggles all collapsible <details> sections at once.
+           --------------------------------------------------------- */
+        (function() {
+            var toggleBtn = document.querySelector('.toggle-all');
+            if (!toggleBtn) return;
+
+            toggleBtn.addEventListener('click', function() {
+                var sections = document.querySelectorAll('.collapsible-section');
+                var shouldExpand = this.textContent.trim() === 'Expand all';
+
+                for (var i = 0; i < sections.length; i++) {
+                    sections[i].open = shouldExpand;
+                }
+
+                this.textContent = shouldExpand ? 'Collapse all' : 'Expand all';
+            });
+        })();
+
+
+        /* ---------------------------------------------------------
+           Hero stat count-up animation
+           Numbers in the hero stats panel count up from 0 to their
+           target value with an ease-out curve for a polished effect.
+           --------------------------------------------------------- */
+        (function() {
+            var elements = document.querySelectorAll('[data-count]');
+
+            for (var i = 0; i < elements.length; i++) {
+                (function(el) {
+                    var target = parseInt(el.getAttribute('data-count'), 10);
+                    if (target === 0 || isNaN(target)) return;
+
+                    var duration = 700;
+                    var start = null;
+                    el.textContent = '0';
+
+                    function step(timestamp) {
+                        if (!start) start = timestamp;
+                        var progress = Math.min((timestamp - start) / duration, 1);
+                        /* Ease-out cubic for a smooth deceleration */
+                        var eased = 1 - Math.pow(1 - progress, 3);
+                        el.textContent = Math.round(eased * target);
+                        if (progress < 1) {
+                            requestAnimationFrame(step);
+                        }
+                    }
+
+                    /* Slight delay so the animation starts after the hero fades in */
+                    setTimeout(function() {
+                        requestAnimationFrame(step);
+                    }, 200);
+                })(elements[i]);
+            }
+        })();
+
+
+        /* ---------------------------------------------------------
+           Print handler
+           Before printing, expand all <details> elements so nothing
+           is hidden in the PDF. After printing, restore the original
+           open/closed state of each section.
+           --------------------------------------------------------- */
+        window.addEventListener('beforeprint', function() {
+            var details = document.querySelectorAll('details');
+            for (var i = 0; i < details.length; i++) {
+                details[i].setAttribute('data-was-open', details[i].open);
+                details[i].open = true;
+            }
+        });
+
+        window.addEventListener('afterprint', function() {
+            var details = document.querySelectorAll('details');
+            for (var i = 0; i < details.length; i++) {
+                details[i].open = details[i].getAttribute('data-was-open') === 'true';
+            }
+        });
+
+
+        /* ---------------------------------------------------------
+           Scroll progress bar
+           Updates a thin bar at the top of the viewport to show
+           how far the user has scrolled through the report.
+           --------------------------------------------------------- */
+        (function() {
+            var bar = document.querySelector('.scroll-progress');
+            if (!bar) return;
+
+            window.addEventListener('scroll', function() {
+                var scrollTop = window.scrollY;
+                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                bar.style.width = progress + '%';
+            }, { passive: true });
+        })();
+
+
+        /* ---------------------------------------------------------
+           Dark mode toggle
+           Switches between light and dark themes. Saves preference
+           to localStorage so it persists across page reloads.
+           --------------------------------------------------------- */
+        (function() {
+            var btn = document.querySelector('.dark-mode-toggle');
+            if (!btn) return;
+
+            /* Restore saved preference */
+            if (localStorage.getItem('lc-dark-mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                btn.innerHTML = '&#9788;'; /* Sun icon */
+            }
+
+            btn.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                var isDark = document.body.classList.contains('dark-mode');
+                btn.innerHTML = isDark ? '&#9788;' : '&#9790;';
+                localStorage.setItem('lc-dark-mode', isDark);
+            });
+        })();
+
+
+        /* ---------------------------------------------------------
+           Back to top button
+           Shows when scrolled past the hero header area.
+           --------------------------------------------------------- */
+        (function() {
+            var btn = document.querySelector('.back-to-top');
+            if (!btn) return;
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 400) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            }, { passive: true });
+
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+
+
+        /* ---------------------------------------------------------
+           Keyboard shortcuts
+           / = focus search, D = toggle dark mode, T = scroll to top,
+           E = expand/collapse all. Only when not typing in an input.
+           --------------------------------------------------------- */
+        (function() {
+            document.addEventListener('keydown', function(e) {
+                /* Ignore if user is typing in the search bar */
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    /* But allow Escape to blur the search bar */
+                    if (e.key === 'Escape') e.target.blur();
+                    return;
+                }
+
+                switch(e.key) {
+                    case '/':
+                        e.preventDefault();
+                        var search = document.getElementById('table-search');
+                        if (search) search.focus();
+                        break;
+                    case 'd':
+                    case 'D':
+                        var darkBtn = document.querySelector('.dark-mode-toggle');
+                        if (darkBtn) darkBtn.click();
+                        break;
+                    case 't':
+                    case 'T':
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        break;
+                    case 'e':
+                    case 'E':
+                        var toggleBtn = document.querySelector('.toggle-all');
+                        if (toggleBtn) toggleBtn.click();
+                        break;
+                }
+            });
+        })();
+
+
+        /* ---------------------------------------------------------
+           Shortcut hint toast
+           Shows briefly on page load to inform users about keyboard
+           navigation, then fades out.
+           --------------------------------------------------------- */
+        (function() {
+            var hint = document.querySelector('.shortcut-hint');
+            if (!hint) return;
+
+            setTimeout(function() {
+                hint.classList.add('visible');
+            }, 1500);
+
+            setTimeout(function() {
+                hint.classList.remove('visible');
+            }, 6000);
+        })();
+    </script>
+
+</body>
+</html>

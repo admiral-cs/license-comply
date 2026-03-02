@@ -1,0 +1,240 @@
+# =============================================================================
+# LICENSE KNOWLEDGE BASE — GENERAL INFORMATION ONLY
+#
+# This file contains general information about common open-source license
+# terms and their typical obligations. It is provided as-is for informational
+# purposes and does not constitute legal advice. The classifications and
+# descriptions reflect general principles and may not account for jurisdiction-
+# specific laws, contractual modifications, or the specific facts of any
+# particular situation. Consult qualified legal counsel for advice specific
+# to your circumstances.
+# =============================================================================
+
+# Compatibility Rules for license-comply
+#
+# This file defines how each license category interacts with each project type.
+# The tool uses these rules to determine the risk level for each dependency.
+#
+# This is where the legal analysis happens. The same license can be perfectly
+# fine in one context (e.g., GPL in a GPL-licensed project) and a critical
+# issue in another (e.g., GPL in a proprietary project). These rules encode
+# that context-dependent legal reasoning.
+#
+# Risk levels:
+#   clean     — No issues. This license is fully compatible with this project type.
+#   notice    — Compatible, but there are obligations to be aware of (e.g., attribution).
+#   warning   — May be compatible depending on how the dependency is used. Needs attention.
+#   critical  — Incompatible with this project type. Typically needs resolution.
+
+rules:
+
+  # --- PROPRIETARY PROJECTS (closed-source, distributed commercially) ---
+  # This is the strictest context. Strong copyleft licenses are incompatible
+  # because they require you to open-source your entire project. Weak copyleft
+  # gets a warning because it depends on how you use the library (dynamic
+  # linking is usually fine, static linking is a grey area).
+  #
+  # NOTE on LGPL and Python: Python's standard `import` mechanism is dynamic
+  # linking, which generally satisfies LGPL's linking requirements. However,
+  # we keep LGPL at "warning" (not "notice") because C extensions, PyInstaller
+  # bundles, Cython compilations, and other packaging methods may constitute
+  # static linking — which triggers stronger copyleft obligations.
+  proprietary:
+    permissive: "clean"
+    public_domain: "clean"
+    weak_copyleft: "warning"
+    strong_copyleft: "critical"
+    proprietary: "critical"
+    non_software: "warning"
+    unknown: "critical"
+
+  # --- INTERNAL PROJECTS (used only within your organization, not distributed) ---
+  # Most licenses only impose obligations upon *distribution*, so internal use
+  # carries significantly lower risk. Strong copyleft is just a notice here
+  # because you're not distributing the software to anyone outside your org.
+  # AGPL is the exception — it triggers obligations on *network use*, not just
+  # distribution. That's handled in the special_rules section below.
+  internal:
+    permissive: "clean"
+    public_domain: "clean"
+    weak_copyleft: "clean"
+    strong_copyleft: "notice"
+    proprietary: "warning"
+    non_software: "notice"
+    unknown: "warning"
+
+  # --- OPEN SOURCE PERMISSIVE (your project is MIT, Apache, BSD, etc.) ---
+  # Similar to proprietary: strong copyleft would force your permissive project
+  # to become copyleft (you can't distribute MIT code that includes GPL code
+  # without making the whole thing GPL). Weak copyleft gets a warning because
+  # it needs careful handling.
+  open-source-permissive:
+    permissive: "clean"
+    public_domain: "clean"
+    weak_copyleft: "warning"
+    strong_copyleft: "critical"
+    proprietary: "critical"
+    non_software: "warning"
+    unknown: "critical"
+
+  # --- OPEN SOURCE COPYLEFT (your project is GPL, AGPL, etc.) ---
+  # The most relaxed context. If your project is already copyleft, most
+  # license categories are compatible. Even strong copyleft is fine because
+  # your project already has the same obligations. Non-software and unknown
+  # still warrant attention.
+  open-source-copyleft:
+    permissive: "clean"
+    public_domain: "clean"
+    weak_copyleft: "clean"
+    strong_copyleft: "clean"
+    proprietary: "critical"
+    non_software: "warning"
+    unknown: "warning"
+
+  # --- SAAS (software as a service, never distributed to users) ---
+  # Similar to internal use: because you're not distributing the software,
+  # most copyleft obligations don't trigger. Strong copyleft is just a notice.
+  # HOWEVER, AGPL was specifically designed to close this "SaaS loophole" —
+  # that's handled in the special_rules section below.
+  saas:
+    permissive: "clean"
+    public_domain: "clean"
+    weak_copyleft: "clean"
+    strong_copyleft: "notice"
+    proprietary: "critical"
+    non_software: "notice"
+    unknown: "warning"
+
+# Special rules that override the category-level defaults above.
+# These handle specific license + project type combinations that need
+# different treatment from their general category.
+#
+# Why special rules exist: Sometimes a specific license behaves differently
+# from its category in a particular context. The most important example is
+# AGPL in SaaS — while other strong copyleft licenses (GPL) only trigger
+# on distribution, AGPL triggers on *network interaction*, which directly
+# applies to SaaS deployments.
+special_rules:
+
+  - spdx_id: "AGPL-3.0-only"
+    project_type: "saas"
+    risk_level: "critical"
+    reason: >
+      AGPL-3.0 specifically requires source code disclosure when users interact
+      with the software over a network. This directly applies to SaaS deployments,
+      making it critical even though other strong copyleft licenses (like GPL) are
+      only 'notice' level for SaaS.
+
+  - spdx_id: "AGPL-3.0-only"
+    project_type: "internal"
+    risk_level: "warning"
+    reason: >
+      Even for internal tools, AGPL may require source disclosure if internal
+      users access the software over a network. Evaluate whether your internal
+      deployment model triggers the AGPL network clause.
+
+  # CC-BY-NC licenses prohibit commercial use — critical for commercial projects.
+  # The default non_software category gives "warning" for proprietary, but NC
+  # licenses need "critical" because the non-commercial restriction directly
+  # prohibits commercial use.
+  - spdx_id: "CC-BY-NC-4.0"
+    project_type: "proprietary"
+    risk_level: "critical"
+    reason: >
+      CC-BY-NC-4.0 prohibits commercial use. Using this material in a
+      proprietary (commercial) product directly violates the license terms.
+      Replace with a permissively-licensed alternative or obtain a separate
+      commercial license from the rights holder.
+
+  - spdx_id: "CC-BY-NC-4.0"
+    project_type: "saas"
+    risk_level: "critical"
+    reason: >
+      CC-BY-NC-4.0 prohibits commercial use. Operating a SaaS product
+      that incorporates NC-licensed material likely constitutes commercial
+      use, violating the license terms.
+
+  - spdx_id: "CC-BY-NC-SA-4.0"
+    project_type: "proprietary"
+    risk_level: "critical"
+    reason: >
+      CC-BY-NC-SA-4.0 prohibits commercial use and requires share-alike.
+      Using this material in a proprietary (commercial) product directly
+      violates both the non-commercial and share-alike conditions.
+
+  - spdx_id: "CC-BY-NC-SA-4.0"
+    project_type: "saas"
+    risk_level: "critical"
+    reason: >
+      CC-BY-NC-SA-4.0 prohibits commercial use and requires share-alike.
+      Operating a SaaS product that incorporates NC-SA-licensed material
+      likely constitutes commercial use, violating the license terms.
+
+  # AGPL-3.0-or-later has the same special treatment as AGPL-3.0-only
+  - spdx_id: "AGPL-3.0-or-later"
+    project_type: "saas"
+    risk_level: "critical"
+    reason: >
+      AGPL-3.0 (or later) requires source code disclosure when users interact
+      with the software over a network. This directly applies to SaaS deployments.
+
+  - spdx_id: "AGPL-3.0-or-later"
+    project_type: "internal"
+    risk_level: "warning"
+    reason: >
+      Even for internal tools, AGPL may require source disclosure if internal
+      users access the software over a network.
+
+# License-to-license conflict rules.
+#
+# These detect incompatibilities between specific licenses that the
+# category-level matrix cannot see. For example, GPL-2.0-only and
+# GPL-3.0-only are both "strong_copyleft", but they are legally
+# incompatible with each other — you cannot combine code under both
+# in a single project.
+#
+# These rules are only checked when --project-license is provided.
+# Each entry specifies a license that conflicts with one or more
+# other licenses. Conflicts are always critical.
+#
+# Fields:
+#   spdx_id  — The dependency's license
+#   conflicts_with — List of project licenses this conflicts with
+#   reason — Plain-English explanation of the conflict
+license_conflicts:
+
+  # GPL-2.0-only and GPL-3.0-only are incompatible. GPL-2.0-only code
+  # cannot be relicensed under GPL-3.0 (the "only" suffix means exactly
+  # that version). This is a well-known compatibility issue.
+  - spdx_id: "GPL-2.0-only"
+    conflicts_with:
+      - "GPL-3.0-only"
+      - "GPL-3.0-or-later"
+    reason: >
+      GPL-2.0-only is incompatible with GPL-3.0. Code licensed under
+      GPL-2.0-only cannot be combined with GPL-3.0-only code because
+      the "only" suffix prevents upgrading to a later GPL version.
+
+  - spdx_id: "GPL-3.0-only"
+    conflicts_with:
+      - "GPL-2.0-only"
+    reason: >
+      GPL-3.0-only is incompatible with GPL-2.0-only. These two GPL
+      versions cannot be combined in the same project unless one side
+      uses the "or-later" variant.
+
+  # CDDL-1.0 is famously incompatible with all GPL variants.
+  # The FSF and Oracle/Sun have both acknowledged this incompatibility.
+  - spdx_id: "CDDL-1.0"
+    conflicts_with:
+      - "GPL-2.0-only"
+      - "GPL-2.0-or-later"
+      - "GPL-3.0-only"
+      - "GPL-3.0-or-later"
+      - "AGPL-3.0-only"
+      - "AGPL-3.0-or-later"
+    reason: >
+      CDDL-1.0 is incompatible with all GPL and AGPL licenses. The CDDL
+      and GPL have conflicting copyleft requirements — each requires
+      derivative works to be licensed under itself, creating an
+      irreconcilable conflict.

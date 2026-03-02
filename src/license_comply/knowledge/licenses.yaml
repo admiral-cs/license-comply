@@ -1,0 +1,998 @@
+# =============================================================================
+# LICENSE KNOWLEDGE BASE — GENERAL INFORMATION ONLY
+#
+# This file contains general information about common open-source license
+# terms and their typical obligations. It is provided as-is for informational
+# purposes and does not constitute legal advice. The classifications and
+# descriptions reflect general principles and may not account for jurisdiction-
+# specific laws, contractual modifications, or the specific facts of any
+# particular situation. Consult qualified legal counsel for advice specific
+# to your circumstances.
+# =============================================================================
+
+# License Definitions for license-comply
+#
+# This file defines every license the tool recognizes. Each entry includes
+# the SPDX identifier, the legal category, a plain-English description of
+# what the license requires, and key obligations.
+#
+# These entries are curated to be both technically accurate and understandable
+# to non-lawyers. They reflect general open-source licensing principles.
+#
+# To add a new license, copy an existing entry and modify it.
+#
+# Fields:
+#   spdx_id      — The standardized SPDX identifier (e.g., "MIT", "GPL-3.0-only")
+#   names        — All known string variations the tool should recognize
+#   category     — One of: permissive, weak_copyleft, strong_copyleft,
+#                  public_domain, non_software, proprietary
+#   summary      — Plain-English explanation of what this license means
+#   obligations  — List of things a user must do to comply. Each obligation is
+#                  an object with two fields:
+#                    text     — The obligation description
+#                    category — One of: notice, disclosure, source_sharing,
+#                               use_restriction, technical
+#   risks        — List of potential legal pitfalls to watch out for
+#
+# License categories explained:
+#   permissive         — Minimal restrictions. Users can do almost anything.
+#   weak_copyleft      — Copyleft applies to the library itself but not your whole project.
+#   strong_copyleft    — Copyleft applies to your entire project if you distribute it.
+#   public_domain      — No copyright restrictions at all.
+#   non_software       — Designed for creative works, not software. Use in code is unusual.
+#
+# Obligation categories explained:
+#   notice           — Include copyright notices, license text, give attribution
+#   disclosure       — State or document modifications, mark altered versions
+#   source_sharing   — Share source code, copyleft distribution requirements
+#   use_restriction  — Endorsement restrictions, misrepresentation prohibitions
+#   technical        — Linking requirements, installation instructions
+
+licenses:
+
+  # =========================================================================
+  # PERMISSIVE LICENSES
+  # These are the "easy" ones — minimal restrictions, maximum freedom.
+  # =========================================================================
+
+  - spdx_id: "MIT"
+    names:
+      - "MIT"
+      - "MIT License"
+      - "The MIT License"
+      - "MIT license"
+    category: "permissive"
+    summary: >
+      One of the most permissive open-source licenses. This license allows use,
+      copying, modification, merging, publishing, distribution, sublicensing,
+      and selling copies of the software. The only requirement is including the
+      original copyright notice and the license text in any copy or substantial
+      portion of the software.
+    obligations:
+      - text: "Include copyright notice and license text in distributions"
+        category: "notice"
+    risks:
+      - "License text must be included even in binary/compiled distributions — a commonly overlooked compliance obligation"
+
+  - spdx_id: "Apache-2.0"
+    names:
+      - "Apache-2.0"
+      - "Apache License 2.0"
+      - "Apache Software License"
+      - "Apache 2.0"
+      - "Apache License, Version 2.0"
+    category: "permissive"
+    summary: >
+      A permissive license similar to MIT, but with an important addition: it
+      includes an explicit patent grant. Contributors to Apache-licensed code
+      automatically grant users a license to any patents that cover their
+      contributions. This provides extra legal protection against patent claims.
+    obligations:
+      - text: "Include copyright notice, license text, and NOTICE file (if present) in distributions"
+        category: "notice"
+      - text: "State any modifications made to the original code"
+        category: "disclosure"
+    risks:
+      - "If you add a patent claim against the software, your patent license is terminated"
+
+  - spdx_id: "BSD-3-Clause"
+    names:
+      - "BSD-3-Clause"
+      - "BSD License"
+      - "BSD 3-Clause License"
+      - "Revised BSD License"
+      - "New BSD License"
+      - "BSD-3-Clause License"
+      - "BSD 3-Clause"
+    category: "permissive"
+    summary: >
+      A permissive license that allows virtually unrestricted use. This license
+      requires including the original copyright notice in source distributions
+      and prohibits using the project contributors' names to endorse derived
+      products without permission.
+    obligations:
+      - text: "Include copyright notice in source code distributions"
+        category: "notice"
+      - text: "Include copyright notice in binary distributions (in documentation or materials)"
+        category: "notice"
+      - text: "Do not use contributor names for endorsement without permission"
+        category: "use_restriction"
+    risks:
+      - "License text must be included even in binary/compiled distributions — a commonly overlooked compliance obligation"
+
+  - spdx_id: "BSD-2-Clause"
+    names:
+      - "BSD-2-Clause"
+      - "Simplified BSD License"
+      - "FreeBSD License"
+      - "BSD 2-Clause License"
+    category: "permissive"
+    summary: >
+      A simplified version of the BSD-3-Clause license. Same permissions and
+      requirements, minus the non-endorsement clause. Functionally very similar
+      to MIT.
+    obligations:
+      - text: "Include copyright notice in source and binary distributions"
+        category: "notice"
+    risks:
+      - "License text must be included even in binary/compiled distributions — a commonly overlooked compliance obligation"
+
+  - spdx_id: "ISC"
+    names:
+      - "ISC"
+      - "ISC License"
+    category: "permissive"
+    summary: >
+      A permissive license functionally equivalent to MIT, but with simpler
+      language. Common in smaller packages and tools.
+    obligations:
+      - text: "Include copyright notice and license text"
+        category: "notice"
+    risks:
+      - "License text must be included even in binary/compiled distributions — a commonly overlooked compliance obligation"
+
+  - spdx_id: "PSF-2.0"
+    names:
+      - "PSF-2.0"
+      - "Python Software Foundation License"
+      - "PSF License"
+      - "PSF"
+      - "PSFL"
+    category: "permissive"
+    summary: >
+      The Python Software Foundation License, used by CPython itself and many
+      packages in the Python ecosystem. A permissive license that allows use,
+      modification, and distribution with minimal requirements.
+    obligations:
+      - text: "Include copyright notice and license text"
+        category: "notice"
+    risks: []
+
+  - spdx_id: "Zlib"
+    names:
+      - "Zlib"
+      - "zlib License"
+      - "zlib/libpng License"
+    category: "permissive"
+    summary: >
+      A short permissive license commonly used for compression libraries (zlib,
+      libpng) and in game development. Allows use for any purpose, with the
+      only restriction being that you don't misrepresent the origin of the
+      software.
+    obligations:
+      - text: "Do not misrepresent the origin of the software"
+        category: "use_restriction"
+      - text: "Mark altered source versions as such"
+        category: "disclosure"
+    risks: []
+
+  - spdx_id: "Artistic-2.0"
+    names:
+      - "Artistic-2.0"
+      - "Artistic License 2.0"
+      - "The Artistic License 2.0"
+    category: "permissive"
+    summary: >
+      A permissive license originally created for the Perl programming language.
+      Version 2.0 is clearer and more permissive than version 1.0. Allows free
+      use, modification, and redistribution. Modifications must be documented.
+    obligations:
+      - text: "Document any modifications"
+        category: "disclosure"
+      - text: "Include license text"
+        category: "notice"
+    risks: []
+
+  # =========================================================================
+  # PUBLIC DOMAIN LICENSES
+  # No restrictions at all — the author has given up all rights.
+  # =========================================================================
+
+  - spdx_id: "Unlicense"
+    names:
+      - "Unlicense"
+      - "The Unlicense"
+    category: "public_domain"
+    summary: >
+      A public domain dedication. The author waives all copyright and related
+      rights. The code may be used for any purpose with no conditions. Note that
+      public domain dedications may not be legally effective in all jurisdictions
+      (some countries do not recognize voluntary abandonment of copyright).
+    obligations: []
+    risks:
+      - "Public domain status may not be recognized in all jurisdictions"
+
+  - spdx_id: "CC0-1.0"
+    names:
+      - "CC0-1.0"
+      - "CC0"
+      - "Creative Commons Zero"
+      - "CC0 1.0 Universal"
+    category: "public_domain"
+    summary: >
+      Creative Commons' public domain dedication tool. Waives all copyright and
+      related rights, and includes a fallback permissive license for jurisdictions
+      that do not recognize public domain dedications. More legally robust than
+      the Unlicense for international use.
+    obligations: []
+    risks: []
+
+  - spdx_id: "0BSD"
+    names:
+      - "0BSD"
+      - "Zero-Clause BSD"
+      - "BSD Zero Clause License"
+      - "Free Public License 1.0.0"
+    category: "public_domain"
+    summary: >
+      The Zero-Clause BSD license is essentially a public domain equivalent.
+      It grants permission to use, copy, modify, and distribute without any
+      conditions at all — not even the requirement to include the license text.
+      The most permissive possible license.
+    obligations: []
+    risks: []
+
+  - spdx_id: "WTFPL"
+    names:
+      - "WTFPL"
+      - "Do What The F*ck You Want To Public License"
+    category: "public_domain"
+    summary: >
+      A maximally permissive license with intentionally crude humor. Grants
+      unrestricted permission to do anything with the software. Note: unlike
+      CC0 or the Unlicense, WTFPL technically grants permission rather than
+      waiving copyright — the practical effect is the same, but it may not
+      hold up in jurisdictions that require explicit copyright waiver. Some
+      organizations avoid it due to its informal nature and potential
+      ambiguity about patent rights.
+    obligations: []
+    risks:
+      - "No explicit patent grant — could theoretically be subject to patent claims"
+      - "Some organizations' policies may reject it due to its informal nature"
+
+  # =========================================================================
+  # WEAK COPYLEFT LICENSES
+  # Copyleft applies to the library itself, but not to your whole project.
+  # These are the "middle ground" — some conditions, but manageable.
+  # =========================================================================
+
+  - spdx_id: "LGPL-2.1-only"
+    names:
+      - "LGPL-2.1"
+      - "LGPL-2.1-only"
+      - "GNU Lesser General Public License v2.1"
+      - "GNU Lesser General Public License v2.1 only"
+      - "LGPLv2.1"
+    category: "weak_copyleft"
+    summary: >
+      The "Lesser" GPL version 2.1 is designed for libraries. The copyleft
+      obligation applies only to the LGPL-licensed library itself, not to the
+      entire project. Using an LGPL library without modification and linking to
+      it dynamically (the standard way Python imports packages) generally does
+      not require open-sourcing the project. Very similar to LGPL-3.0 but an
+      older version still widely used by packages like chardet.
+    obligations:
+      - text: "Modifications to the LGPL library must be distributed under LGPL"
+        category: "source_sharing"
+      - text: "Allow users to replace the LGPL library with their own version (dynamic linking satisfies this)"
+        category: "technical"
+      - text: "Include license text and copyright notices"
+        category: "notice"
+    risks:
+      - "Static linking may trigger stronger copyleft obligations (legal grey area)"
+      - "Modifications to the library itself must be open-sourced"
+
+  - spdx_id: "LGPL-2.1-or-later"
+    names:
+      - "LGPL-2.1-or-later"
+      - "LGPL-2.1+"
+      - "LGPLv2+"
+      - "LGPLv2.1+"
+      - "GNU Lesser General Public License v2 or later (LGPLv2+)"
+      - "GNU Lesser General Public License v2 or later"
+      - "GNU Lesser General Public License v2.1 or later"
+    category: "weak_copyleft"
+    summary: >
+      The "or later" variant of LGPL-2.1. The user may comply under LGPL-2.1
+      or any later version of the LGPL (including LGPL-3.0). This gives more
+      flexibility than LGPL-2.1-only because the licensee can choose a newer
+      LGPL version if it better suits their needs. Same core obligations as
+      LGPL-2.1-only.
+    obligations:
+      - text: "Modifications to the LGPL library must be distributed under LGPL"
+        category: "source_sharing"
+      - text: "Allow users to replace the LGPL library with their own version (dynamic linking satisfies this)"
+        category: "technical"
+      - text: "Include license text and copyright notices"
+        category: "notice"
+    risks:
+      - "Static linking may trigger stronger copyleft obligations (legal grey area)"
+      - "Modifications to the library itself must be open-sourced"
+
+  - spdx_id: "LGPL-3.0-only"
+    names:
+      - "LGPL-3.0"
+      - "LGPL-3.0-only"
+      - "GNU Lesser General Public License v3.0"
+      - "GNU Lesser General Public License v3.0 only"
+      - "LGPLv3"
+    category: "weak_copyleft"
+    summary: >
+      The "Lesser" GPL is designed for libraries. The copyleft obligation
+      applies only to the LGPL-licensed library itself, not to the entire
+      project. Using an LGPL library without modification and linking to it
+      dynamically (the standard way Python imports packages) generally does
+      not require open-sourcing the project. However, modifications to the
+      library itself must be shared under LGPL.
+    obligations:
+      - text: "Modifications to the LGPL library must be distributed under LGPL"
+        category: "source_sharing"
+      - text: "Allow users to replace the LGPL library with their own version (dynamic linking satisfies this)"
+        category: "technical"
+      - text: "Include license text and copyright notices"
+        category: "notice"
+    risks:
+      - "Static linking may trigger stronger copyleft obligations (legal grey area)"
+      - "Modifications to the library itself must be open-sourced"
+
+  - spdx_id: "LGPL-3.0-or-later"
+    names:
+      - "LGPL-3.0-or-later"
+      - "LGPL-3.0+"
+      - "LGPLv3+"
+      - "GNU Lesser General Public License v3.0 or later"
+    category: "weak_copyleft"
+    summary: >
+      The "or later" variant of LGPL-3.0. The user may comply under LGPL-3.0
+      or any later version of the LGPL. This gives more flexibility than
+      LGPL-3.0-only. Same core obligations as LGPL-3.0-only.
+    obligations:
+      - text: "Modifications to the LGPL library must be distributed under LGPL"
+        category: "source_sharing"
+      - text: "Allow users to replace the LGPL library with their own version (dynamic linking satisfies this)"
+        category: "technical"
+      - text: "Include license text and copyright notices"
+        category: "notice"
+    risks:
+      - "Static linking may trigger stronger copyleft obligations (legal grey area)"
+      - "Modifications to the library itself must be open-sourced"
+
+  - spdx_id: "MPL-2.0"
+    names:
+      - "MPL-2.0"
+      - "Mozilla Public License 2.0"
+      - "MPL 2.0"
+    category: "weak_copyleft"
+    summary: >
+      A file-level copyleft license. Modifying an MPL-licensed file requires
+      keeping it under MPL. However, MPL files can be combined with files under
+      other licenses (including proprietary) in the same project.
+      This makes MPL more business-friendly than GPL while still ensuring
+      improvements to the original code are shared back.
+    obligations:
+      - text: "Modified MPL-licensed files must remain under MPL and be made available in source form"
+        category: "source_sharing"
+      - text: "Include license text"
+        category: "notice"
+    risks:
+      - "Must track which files are MPL-licensed and keep them under MPL"
+
+  - spdx_id: "MPL-1.1"
+    names:
+      - "MPL-1.1"
+      - "Mozilla Public License 1.1"
+      - "MPL 1.1"
+    category: "weak_copyleft"
+    summary: >
+      The older version of the Mozilla Public License. Like MPL-2.0, it uses
+      file-level copyleft — modified files must remain under MPL-1.1. However,
+      MPL-1.1 is less compatible with the GPL than MPL-2.0 (which added an
+      explicit GPL compatibility clause). Rare in new projects but still found
+      in older codebases.
+    obligations:
+      - text: "Modified MPL-1.1-licensed files must remain under MPL-1.1 and be made available in source form"
+        category: "source_sharing"
+      - text: "Include license text"
+        category: "notice"
+    risks:
+      - "Less GPL-compatible than MPL-2.0 — combining with GPL code may create conflicts"
+      - "Must track which files are MPL-1.1-licensed and keep them under MPL-1.1"
+
+  - spdx_id: "Artistic-1.0"
+    names:
+      - "Artistic-1.0"
+      - "Artistic License 1.0"
+      - "The Artistic License"
+      - "Artistic License"
+    category: "weak_copyleft"
+    summary: >
+      The original Artistic License, created for Perl. Contains ambiguous
+      language about what constitutes a "Standard Version" versus a modified
+      version, which has caused legal uncertainty. Version 2.0 (Artistic-2.0)
+      was written to address these ambiguities and is significantly clearer.
+      Still found in legacy Perl modules and older CPAN packages.
+    obligations:
+      - text: "Document any modifications"
+        category: "disclosure"
+      - text: "Include license text"
+        category: "notice"
+    risks:
+      - "Ambiguous language about modification rights has been criticized by the FSF and OSI"
+      - "The definition of 'Standard Version' is unclear, creating compliance uncertainty"
+
+  - spdx_id: "CPAL-1.0"
+    names:
+      - "CPAL-1.0"
+      - "Common Public Attribution License 1.0"
+      - "CPAL"
+    category: "weak_copyleft"
+    summary: >
+      The Common Public Attribution License adds an unusual UI attribution
+      requirement on top of MPL-1.0-style file-level copyleft. CPAL-licensed
+      code requires displaying the original author's attribution in the user
+      interface. This requirement is more burdensome than typical open-source
+      attribution (which only requires notices in source/binary distributions).
+    obligations:
+      - text: "Display original author attribution in the user interface of your application"
+        category: "notice"
+      - text: "Modified CPAL-licensed files must remain under CPAL and be made available in source form"
+        category: "source_sharing"
+      - text: "Include license text"
+        category: "notice"
+    risks:
+      - "UI attribution requirement is unusual and may conflict with your application's design"
+      - "Considered incompatible with GPL due to the additional UI requirement"
+
+  - spdx_id: "EPL-2.0"
+    names:
+      - "EPL-2.0"
+      - "Eclipse Public License 2.0"
+      - "Eclipse Public License v2.0"
+    category: "weak_copyleft"
+    summary: >
+      The Eclipse Public License is a weak copyleft license used by the Eclipse
+      Foundation and many Java ecosystem projects. Modifications to EPL-licensed
+      files must be shared, but EPL code can be combined with proprietary code
+      in a larger work. Includes an explicit patent grant.
+    obligations:
+      - text: "Distribute modifications to EPL-licensed code under EPL-2.0"
+        category: "source_sharing"
+      - text: "Include license text"
+        category: "notice"
+      - text: "Make source code of EPL-licensed portions available"
+        category: "source_sharing"
+    risks:
+      - "Modifications to the EPL-licensed code itself must be open-sourced"
+
+  # =========================================================================
+  # STRONG COPYLEFT LICENSES
+  # The "viral" licenses — copyleft applies to your entire project if you
+  # distribute it. These are the ones that cause the most legal concern
+  # in proprietary and commercial settings.
+  # =========================================================================
+
+  - spdx_id: "GPL-3.0-only"
+    names:
+      - "GPL-3.0"
+      - "GPL-3.0-only"
+      - "GNU General Public License v3.0"
+      - "GNU General Public License v3 (GPLv3)"
+      - "GNU General Public License v3"
+      - "GPLv3"
+      - "GNU GPLv3"
+      - "GPL v3"
+      - "GNU General Public License v3.0 only"
+    category: "strong_copyleft"
+    summary: >
+      The GNU General Public License v3.0 is the most widely used strong copyleft
+      license. Distributing software that incorporates GPL-3.0 code — even if the
+      surrounding code is much larger — typically requires making the entire
+      project's source code available under GPL-3.0 terms. This is often called the "viral" or
+      "copyleft" effect. GPL-3.0 also includes an anti-tivoization clause and
+      an explicit patent grant.
+    obligations:
+      - text: "Distribute your complete source code under GPL-3.0 if you distribute the binary"
+        category: "source_sharing"
+      - text: "Include the full GPL-3.0 license text"
+        category: "notice"
+      - text: "Provide installation instructions for modified versions"
+        category: "technical"
+      - text: "Preserve all copyright notices"
+        category: "notice"
+    risks:
+      - "Incorporating GPL-3.0 code into a proprietary project and distributing it violates the license"
+      - "Linking to GPL-3.0 libraries may trigger copyleft obligations (legal debate exists on dynamic vs. static linking)"
+
+  - spdx_id: "GPL-3.0-or-later"
+    names:
+      - "GPL-3.0-or-later"
+      - "GPL-3.0+"
+      - "GPLv3+"
+      - "GNU General Public License v3.0 or later"
+    category: "strong_copyleft"
+    summary: >
+      The "or later" variant of GPL-3.0. The licensee may comply under
+      GPL-3.0 or any later version published by the FSF. This gives more
+      flexibility than GPL-3.0-only — for example, it allows upgrading to
+      a future GPL-4.0 if one is released. Same copyleft obligations as
+      GPL-3.0-only.
+    obligations:
+      - text: "Distribute your complete source code under GPL-3.0 (or later) if you distribute the binary"
+        category: "source_sharing"
+      - text: "Include the full GPL license text"
+        category: "notice"
+      - text: "Provide installation instructions for modified versions"
+        category: "technical"
+      - text: "Preserve all copyright notices"
+        category: "notice"
+    risks:
+      - "Same copyleft obligations as GPL-3.0-only"
+      - "Linking to GPL libraries may trigger copyleft obligations"
+
+  - spdx_id: "GPL-2.0-only"
+    names:
+      - "GPL-2.0"
+      - "GPL-2.0-only"
+      - "GNU General Public License v2.0"
+      - "GNU General Public License v2 (GPLv2)"
+      - "GNU General Public License v2"
+      - "GPLv2"
+      - "GNU GPLv2"
+      - "GPL v2"
+      - "GNU General Public License v2.0 only"
+    # Ambiguous names: these strings match GPL-2.0-only as a fallback, but
+    # could refer to any GPL version. The classifier sets a classification_note
+    # when matching against these names to warn the user about the ambiguity.
+    ambiguous_names:
+      - "GNU General Public License"
+      - "GNU General Public License (GPL)"
+    category: "strong_copyleft"
+    summary: >
+      The older version of the GPL. Similar copyleft obligations to GPL-3.0,
+      but without the anti-tivoization clause and explicit patent grant.
+      Still widely used. Importantly, GPL-2.0-only code is NOT compatible
+      with GPL-3.0-only code — they cannot be combined in the same project
+      unless the author permits "GPL-2.0-or-later."
+    obligations:
+      - text: "Distribute your complete source code under GPL-2.0 if you distribute the binary"
+        category: "source_sharing"
+      - text: "Include the full GPL-2.0 license text"
+        category: "notice"
+      - text: "Preserve all copyright notices"
+        category: "notice"
+    risks:
+      - "Same copyleft contamination risk as GPL-3.0"
+      - "Incompatible with GPL-3.0-only (cannot combine them)"
+
+  - spdx_id: "GPL-2.0-or-later"
+    names:
+      - "GPL-2.0-or-later"
+      - "GPL-2.0+"
+      - "GPLv2+"
+      - "GNU General Public License v2.0 or later"
+      - "GNU General Public License v2 or later"
+    category: "strong_copyleft"
+    summary: >
+      The "or later" variant of GPL-2.0. The licensee may comply under
+      GPL-2.0 or any later version (including GPL-3.0). This is more
+      flexible than GPL-2.0-only and importantly allows compatibility with
+      GPL-3.0-only code, since the licensee can choose to comply under
+      GPL-3.0.
+    obligations:
+      - text: "Distribute your complete source code under GPL-2.0 (or later) if you distribute the binary"
+        category: "source_sharing"
+      - text: "Include the full GPL license text"
+        category: "notice"
+      - text: "Preserve all copyright notices"
+        category: "notice"
+    risks:
+      - "Same copyleft contamination risk as GPL-3.0"
+      - "Choosing a later version (e.g., GPL-3.0) may add additional obligations"
+
+  - spdx_id: "AGPL-3.0-only"
+    names:
+      - "AGPL-3.0"
+      - "AGPL-3.0-only"
+      - "GNU Affero General Public License v3.0"
+      - "GNU Affero General Public License v3"
+      - "GNU Affero General Public License v3.0 only"
+      - "AGPLv3"
+    category: "strong_copyleft"
+    summary: >
+      The strongest copyleft license in common use. It extends GPL-3.0 with a
+      critical additional requirement: if modified AGPL software runs on a
+      server and users interact with it over a network (e.g., as a web
+      application or API), this license requires making the complete source
+      code available to those users. This closes the "SaaS loophole" in GPL — where companies
+      could modify GPL code and run it as a service without distributing it.
+    obligations:
+      - text: "All GPL-3.0 obligations apply"
+        category: "source_sharing"
+      - text: "Additionally: provide source code to any user who interacts with the software over a network"
+        category: "source_sharing"
+    risks:
+      - "AGPL-3.0 is incompatible with almost all proprietary and SaaS business models"
+      - "Many organizations (including Google) have blanket bans on AGPL dependencies"
+
+  - spdx_id: "AGPL-3.0-or-later"
+    names:
+      - "AGPL-3.0-or-later"
+      - "AGPL-3.0+"
+      - "AGPLv3+"
+      - "GNU Affero General Public License v3 or later (AGPLv3+)"
+      - "GNU Affero General Public License v3 or later"
+      - "GNU Affero General Public License v3.0 or later"
+    category: "strong_copyleft"
+    summary: >
+      The "or later" variant of AGPL-3.0. The licensee may comply under
+      AGPL-3.0 or any later version. Same network-use copyleft obligations
+      as AGPL-3.0-only — if users interact with the software over a network,
+      source code must be provided.
+    obligations:
+      - text: "All GPL-3.0 obligations apply"
+        category: "source_sharing"
+      - text: "Additionally: provide source code to any user who interacts with the software over a network"
+        category: "source_sharing"
+    risks:
+      - "AGPL is incompatible with almost all proprietary and SaaS business models"
+      - "Many organizations have blanket bans on AGPL dependencies"
+
+  - spdx_id: "EUPL-1.2"
+    names:
+      - "EUPL-1.2"
+      - "European Union Public License 1.2"
+      - "European Union Public Licence 1.2"
+      - "EUPL"
+    category: "strong_copyleft"
+    summary: >
+      The European Union Public License, created by the European Commission.
+      A strong copyleft license increasingly common in EU-funded open-source
+      projects. Distributing modified versions requires making the complete
+      source code available under EUPL-1.2 or a compatible license. Includes
+      an explicit patent grant and a broad compatibility clause that allows
+      relicensing under several other copyleft licenses (including GPL-2.0,
+      GPL-3.0, LGPL, and MPL-2.0).
+    obligations:
+      - text: "Distribute your complete source code under EUPL-1.2 (or a compatible license) if you distribute the binary"
+        category: "source_sharing"
+      - text: "Include the full EUPL-1.2 license text"
+        category: "notice"
+      - text: "Preserve all copyright notices"
+        category: "notice"
+    risks:
+      - "Strong copyleft — distributing modified proprietary code violates the license"
+      - "Compatibility clause is complex; consult legal counsel when combining with other copyleft licenses"
+
+  # =========================================================================
+  # NON-SOFTWARE LICENSES
+  # Designed for creative works (text, images, data), not code.
+  # Increasingly common in AI/ML datasets and documentation.
+  # =========================================================================
+
+  - spdx_id: "CC-BY-4.0"
+    names:
+      - "CC-BY-4.0"
+      - "Creative Commons Attribution 4.0"
+      - "CC BY 4.0"
+    category: "non_software"
+    summary: >
+      A Creative Commons license designed for creative works (text, images,
+      data), not software. Allows sharing and adaptation for any purpose,
+      including commercial, as long as you give appropriate credit. Increasingly
+      common in AI/ML datasets and model documentation.
+    obligations:
+      - text: "Give appropriate credit (attribution)"
+        category: "notice"
+      - text: "Indicate if changes were made"
+        category: "disclosure"
+      - text: "Do not apply additional legal restrictions"
+        category: "use_restriction"
+    risks:
+      - "Not designed for software — using it for code is unusual and may create ambiguity"
+      - "Common in AI training datasets — check whether the dataset license imposes obligations on derived models"
+
+  # =========================================================================
+  # ADDITIONAL WEAK COPYLEFT LICENSES
+  # =========================================================================
+
+  - spdx_id: "CDDL-1.0"
+    names:
+      - "CDDL-1.0"
+      - "Common Development and Distribution License"
+      - "Common Development and Distribution License 1.0"
+      - "CDDL"
+    category: "weak_copyleft"
+    summary: >
+      The Common Development and Distribution License, originally created by
+      Sun Microsystems (now Oracle). A file-level copyleft license similar to
+      MPL — modifications to CDDL-licensed files must remain under CDDL, but
+      CDDL files can be combined with files under other licenses. Notably
+      incompatible with the GPL.
+    obligations:
+      - text: "Distribute modifications to CDDL-licensed files under CDDL"
+        category: "source_sharing"
+      - text: "Include license text and copyright notices"
+        category: "notice"
+    risks:
+      - "Incompatible with GPL — cannot combine CDDL and GPL code in the same project"
+
+  # =========================================================================
+  # ADDITIONAL PERMISSIVE LICENSES
+  # =========================================================================
+
+  - spdx_id: "Python-2.0"
+    names:
+      - "Python-2.0"
+      - "Python License 2.0"
+      - "Python Software Foundation License 2.0"
+      - "Python 2.0"
+    category: "permissive"
+    summary: >
+      The Python License 2.0, used by CPython and closely related projects.
+      A permissive license similar to PSF-2.0 but with slightly different
+      wording. Allows free use, modification, and distribution with minimal
+      obligations.
+    obligations:
+      - text: "Include copyright notice and license text"
+        category: "notice"
+    risks: []
+
+  - spdx_id: "HPND"
+    names:
+      - "HPND"
+      - "Historical Permission Notice and Disclaimer"
+    category: "permissive"
+    summary: >
+      The Historical Permission Notice and Disclaimer license, one of the
+      oldest permissive licenses still in use. Functionally similar to MIT
+      — allows use, modification, and distribution with minimal conditions.
+      Often seen in older Unix and networking utilities.
+    obligations:
+      - text: "Include copyright notice and permission notice"
+        category: "notice"
+    risks:
+      - "License text must be included even in binary/compiled distributions — a commonly overlooked compliance obligation"
+
+  - spdx_id: "MIT-0"
+    names:
+      - "MIT-0"
+      - "MIT No Attribution"
+    category: "permissive"
+    summary: >
+      A variant of the MIT license that removes the attribution requirement.
+      Even more permissive than standard MIT — the code may be used without
+      including any copyright notice or license text at all.
+    obligations: []
+    risks: []
+
+  - spdx_id: "PostgreSQL"
+    names:
+      - "PostgreSQL"
+      - "PostgreSQL License"
+      - "The PostgreSQL Licence"
+    category: "permissive"
+    summary: >
+      The PostgreSQL License, a liberal open-source license similar to BSD
+      and MIT. Allows use, modification, and distribution for any purpose
+      with minimal obligations. Used by the PostgreSQL database and related
+      ecosystem packages.
+    obligations:
+      - text: "Include copyright notice and license text"
+        category: "notice"
+    risks:
+      - "License text must be included even in binary/compiled distributions — a commonly overlooked compliance obligation"
+
+  - spdx_id: "Unicode-DFS-2016"
+    names:
+      - "Unicode-DFS-2016"
+      - "Unicode License Agreement - Data Files and Software (2016)"
+      - "Unicode License Agreement - Data Files and Software"
+    category: "permissive"
+    summary: >
+      The Unicode Data Files and Software License (2016 version). A permissive
+      license used for Unicode character data files and related software.
+      Allows free use, modification, and redistribution as long as the
+      copyright notice is included.
+    obligations:
+      - text: "Include copyright notice and license text"
+        category: "notice"
+    risks: []
+
+  - spdx_id: "BSL-1.0"
+    names:
+      - "BSL-1.0"
+      - "Boost Software License 1.0"
+      - "Boost Software License"
+      - "BSL"
+      - "Boost License"
+    category: "permissive"
+    summary: >
+      The Boost Software License, used by the Boost C++ Libraries and many
+      other C++ projects. Extremely permissive — similar to MIT but even
+      simpler. The software may be used, modified, and distributed for any
+      purpose. The only requirement is attribution in source distributions;
+      binary distributions have no requirements at all.
+    obligations:
+      - text: "Include copyright notice and license text in source distributions"
+        category: "notice"
+    risks: []
+
+  # =========================================================================
+  # PROPRIETARY / SOURCE-AVAILABLE LICENSES
+  # These look open-source but have significant commercial restrictions.
+  # =========================================================================
+
+  - spdx_id: "SSPL-1.0"
+    names:
+      - "SSPL-1.0"
+      - "Server Side Public License"
+      - "Server Side Public License v1"
+      - "SSPL"
+    category: "proprietary"
+    summary: >
+      The Server Side Public License, created by MongoDB. Extends AGPL's
+      network-use clause to require that anyone offering the software as a
+      service must also open-source all supporting infrastructure (monitoring,
+      deployment, etc.). This requirement is so broad that the OSI has not
+      approved SSPL as an open-source license. Treat as proprietary.
+    obligations:
+      - text: "If offering the software as a service, open-source your entire service stack"
+        category: "source_sharing"
+    risks:
+      - "Not recognized as open-source by the OSI"
+      - "Service-use clause is extremely broad — covers all supporting infrastructure"
+      - "Incompatible with virtually all commercial and SaaS business models"
+
+  - spdx_id: "Elastic-2.0"
+    names:
+      - "Elastic-2.0"
+      - "Elastic License 2.0"
+      - "Elastic License"
+      - "ELv2"
+    category: "proprietary"
+    summary: >
+      The Elastic License 2.0, used by Elasticsearch and Kibana. Allows use,
+      modification, and redistribution but with two key restrictions: you
+      the software may not be provided as a managed service, and license key
+      functionality may not be circumvented. Not OSI-approved.
+    obligations:
+      - text: "Include license text and copyright notices"
+        category: "notice"
+    risks:
+      - "Not recognized as open-source by the OSI"
+      - "Cannot offer the software as a managed service"
+      - "Cannot remove or circumvent license key functionality"
+
+  - spdx_id: "BSL-1.1"
+    names:
+      - "BSL-1.1"
+      - "Business Source License 1.1"
+      - "Business Source License"
+      - "BUSL-1.1"
+    category: "proprietary"
+    summary: >
+      The Business Source License, used by CockroachDB, HashiCorp, and others.
+      Source code is publicly available, but commercial use is restricted until
+      a "change date" (typically 3-4 years), after which it converts to an
+      open-source license (usually Apache-2.0 or GPL). Not OSI-approved.
+    obligations:
+      - text: "Include license text and copyright notices"
+        category: "notice"
+      - text: "Comply with additional use restrictions specified in the license grant"
+        category: "use_restriction"
+    risks:
+      - "Not recognized as open-source by the OSI"
+      - "Commercial use may be restricted until the change date"
+      - "Specific use restrictions vary by project — always read the Additional Use Grant"
+
+  - spdx_id: "CC-BY-NC-4.0"
+    names:
+      - "CC-BY-NC-4.0"
+      - "Creative Commons Attribution Non Commercial 4.0"
+      - "Creative Commons Attribution-NonCommercial 4.0"
+      - "CC BY-NC 4.0"
+    category: "non_software"
+    summary: >
+      A Creative Commons license that allows sharing and adaptation for
+      non-commercial purposes only, with appropriate credit. The non-commercial
+      restriction makes this license incompatible with most proprietary and
+      commercial projects. Commonly found in AI/ML datasets and trained models.
+    obligations:
+      - text: "Give appropriate credit (attribution)"
+        category: "notice"
+      - text: "Indicate if changes were made"
+        category: "disclosure"
+      - text: "Do not use the material for commercial purposes"
+        category: "use_restriction"
+      - text: "Do not apply additional legal restrictions"
+        category: "use_restriction"
+    risks:
+      - "Non-commercial restriction prohibits use in proprietary and commercial products"
+      - "The definition of 'commercial' is ambiguous — even internal business use may qualify"
+
+  - spdx_id: "CC-BY-NC-SA-4.0"
+    names:
+      - "CC-BY-NC-SA-4.0"
+      - "Creative Commons Attribution Non Commercial Share Alike 4.0"
+      - "Creative Commons Attribution-NonCommercial-ShareAlike 4.0"
+      - "CC BY-NC-SA 4.0"
+    category: "non_software"
+    summary: >
+      Combines the non-commercial restriction of CC-BY-NC-4.0 with a
+      share-alike (copyleft) condition. Adaptations must be distributed under
+      the same or a compatible license AND cannot be used commercially. This is
+      the most restrictive Creative Commons license in common use.
+    obligations:
+      - text: "Give appropriate credit (attribution)"
+        category: "notice"
+      - text: "Indicate if changes were made"
+        category: "disclosure"
+      - text: "Do not use the material for commercial purposes"
+        category: "use_restriction"
+      - text: "Distribute adaptations under CC-BY-NC-SA-4.0 or a compatible license"
+        category: "source_sharing"
+      - text: "Do not apply additional legal restrictions"
+        category: "use_restriction"
+    risks:
+      - "Non-commercial restriction prohibits use in proprietary and commercial products"
+      - "Share-alike condition creates copyleft-like obligations on top of the NC restriction"
+
+  - spdx_id: "CC-BY-SA-4.0"
+    names:
+      - "CC-BY-SA-4.0"
+      - "Creative Commons Attribution Share Alike 4.0"
+      - "CC BY-SA 4.0"
+    category: "non_software"
+    summary: >
+      Like CC-BY-4.0 but with a share-alike (copyleft) condition: if the
+      licensed material is adapted, this license requires distributing
+      contributions under the same or a compatible license. This has been a significant source of
+      license conflicts — code snippets from Stack Overflow are licensed under
+      CC-BY-SA, and incorporating them into a project may trigger obligations.
+    obligations:
+      - text: "Give appropriate credit"
+        category: "notice"
+      - text: "Distribute adaptations under CC-BY-SA-4.0 or a compatible license"
+        category: "source_sharing"
+      - text: "Do not apply additional legal restrictions"
+        category: "use_restriction"
+    risks:
+      - "Share-alike condition can create copyleft-like obligations"
+      - "Common source of accidental license conflicts (e.g., Stack Overflow snippets)"
+
+# ---------------------------------------------------------------------------
+# NOTE FOR CONTRIBUTORS:
+# To add a new license, create a new entry following the pattern above.
+# Required fields: spdx_id, names (list of strings the tool should recognize),
+# category (one of: permissive, weak_copyleft, strong_copyleft, public_domain,
+# non_software), summary, obligations (list of objects with text and category),
+# risks (list of strings).
+#
+# Obligation categories:
+#   notice           — Include copyright notices, license text, give attribution
+#   disclosure       — State or document modifications, mark altered versions
+#   source_sharing   — Share source code, copyleft distribution requirements
+#   use_restriction  — Endorsement restrictions, misrepresentation prohibitions
+#   technical        — Linking requirements, installation instructions
+#
+# ---------------------------------------------------------------------------

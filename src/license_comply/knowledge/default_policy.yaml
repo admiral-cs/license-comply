@@ -1,0 +1,93 @@
+# =============================================================================
+# LICENSE KNOWLEDGE BASE — GENERAL INFORMATION ONLY
+#
+# This file contains general information about common open-source license
+# terms and their typical obligations. It is provided as-is for informational
+# purposes and does not constitute legal advice. The classifications and
+# descriptions reflect general principles and may not account for jurisdiction-
+# specific laws, contractual modifications, or the specific facts of any
+# particular situation. Consult qualified legal counsel for advice specific
+# to your circumstances.
+# =============================================================================
+
+# Default Organizational Policy for license-comply
+#
+# This file defines your organization's license compliance policy.
+# The tool applies these rules ON TOP OF the built-in compatibility analysis.
+#
+# Think of this as a layer of organizational preferences that can override
+# the technical legal analysis. For example, even though LGPL might be
+# technically compatible with your project type, your organization might
+# want to flag it for manual review anyway.
+#
+# You can customize this file for your organization's specific needs.
+# Copy it to your project directory as `.license-comply-policy.yaml` and modify.
+#
+# Policy rules are evaluated in order:
+#   1. If a license is in the "allow" list → always clean (no finding generated)
+#   2. If a license is in the "deny" list → always critical
+#   3. If a license is in the "review" list → always warning
+#   4. Otherwise → fall through to the compatibility rules
+
+policy:
+  name: "Default Policy"
+  description: "A sensible default policy suitable for most commercial projects."
+
+  # Licenses that are always allowed, regardless of project type.
+  # These will never generate a warning or critical finding.
+  # These are the "safest" licenses — universally permissive with minimal obligations.
+  #
+  # NOTE: "Allow" means no finding is generated, but obligations from these
+  # licenses still appear in the obligation rollup at the end of the report.
+  # The rollup captures ALL obligations regardless of findings, so users
+  # still see what they need to do for compliance (e.g., include MIT notice).
+  allow:
+    - "MIT"
+    - "Apache-2.0"
+    - "BSD-2-Clause"
+    - "BSD-3-Clause"
+    - "ISC"
+    - "Unlicense"
+    - "CC0-1.0"
+    - "BSL-1.0"  # Boost Software License (permissive) — NOT BSL-1.1 the Business Source License
+    - "0BSD"
+    - "WTFPL"
+    - "MIT-0"
+    - "PSF-2.0"
+
+  # Licenses that are always blocked, regardless of project type.
+  # These will always generate a critical finding.
+  # Proprietary/source-available licenses are blocked because their terms
+  # are incompatible with most open-source and commercial workflows.
+  #
+  # NOTE: Copyleft licenses (GPL, LGPL, AGPL) are NOT in this list.
+  # They are handled by the compatibility matrix in compatibility.yaml,
+  # which correctly evaluates them per project type (e.g., GPL is fine
+  # in a copyleft project, but critical in a proprietary project).
+  deny:
+    - "SSPL-1.0"
+    - "Elastic-2.0"
+    - "BSL-1.1"
+
+  # Licenses that require manual review.
+  # These will generate a warning finding with a note to review.
+  # These aren't necessarily bad — they just need a human to evaluate
+  # whether they're appropriate for your specific situation.
+  #
+  # NOTE: Copyleft licenses (GPL, LGPL, AGPL, MPL, CDDL) are NOT in
+  # this list. They are handled by the compatibility matrix, which
+  # produces the correct risk level for each project type.
+  #
+  # CC-BY-SA-4.0 is here (not CC-BY-4.0) because the ShareAlike clause
+  # creates copyleft-like obligations — adaptations must be distributed
+  # under the same license. CC-BY-4.0 (without SA) is a non_software
+  # license handled by the compatibility matrix.
+  review:
+    - "CC-BY-SA-4.0"
+
+  # What to do when a license is not recognized.
+  # Options: "critical" (safest), "warning", "notice"
+  # "critical" is the safest default — if we can't identify the license,
+  # assume the worst. Under copyright law, code without an explicit license
+  # is "All Rights Reserved" by default.
+  unknown_license_action: "critical"

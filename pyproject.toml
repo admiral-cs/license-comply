@@ -1,0 +1,144 @@
+# pyproject.toml — The central configuration file for the license-comply package.
+#
+# This file tells pip (and other Python tools) everything they need to know
+# about how to build and install this project. It replaces the older setup.py
+# approach and is the modern standard (PEP 621).
+#
+# Key sections:
+#   [build-system]          — How to build the package (what tools to use)
+#   [project]               — Package metadata (name, version, dependencies, etc.)
+#   [project.scripts]       — CLI commands that get created on install
+#   [tool.setuptools]       — Build tool-specific configuration
+#   [tool.ruff]             — Linter/formatter configuration
+
+# --- Build System ---
+# This tells pip which "backend" to use when building the package.
+# setuptools is the most common and well-supported choice.
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+# --- Project Metadata ---
+[project]
+name = "license-comply"
+version = "1.0.0"
+description = "Open-source license compliance analysis — risk ratings, plain-English explanations, and remediation steps for your project type."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Sam Clearwater"}
+]
+keywords = ["license", "compliance", "open-source", "legal", "audit", "SPDX"]
+
+# Classifiers help people find your package on PyPI. They're like tags.
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+# --- Dependencies ---
+# These packages are REQUIRED — pip installs them automatically when someone
+# installs license-comply.
+dependencies = [
+    "requests>=2.28.0",       # HTTP library for querying the PyPI API
+    "pyyaml>=6.0",            # YAML parser for our knowledge base files
+    "jinja2>=3.1.0",          # Template engine for generating reports
+    "rich>=13.0.0",           # Beautiful terminal output (tables, colors, progress bars)
+    # tomli is a backport of tomllib (built into Python 3.11+).
+    # We only need it for Python 3.9 and 3.10. The syntax below is a
+    # "marker" — pip reads it and only installs tomli on older Pythons.
+    "tomli>=2.0.0; python_version < '3.11'",
+]
+
+# --- Optional Dependencies ---
+# These are installed only when explicitly requested with pip install ".[group]"
+[project.optional-dependencies]
+
+# AI summary feature: pip install ".[ai]"
+ai = [
+    "anthropic>=0.25.0",      # Anthropic's Claude API client
+    "openai>=1.0.0",          # OpenAI's API client
+]
+
+# Development tools: pip install ".[dev]"
+dev = [
+    "pytest>=7.0.0",          # Test framework
+    "pytest-cov>=4.0.0",      # Coverage reporting plugin for pytest
+    "ruff>=0.1.0",            # Linter and formatter (replaces flake8 + black)
+    "responses>=0.23.0",      # HTTP mocking library for testing resolver.py
+]
+
+# --- CLI Entry Point ---
+# This is what creates the `license-comply` command when someone installs the package.
+# It says: "when the user types `license-comply`, run the `main` function
+# from the `license_comply.cli` module."
+[project.scripts]
+license-comply = "license_comply.cli:main"
+
+# --- URLs ---
+# These show up on the PyPI page for the package.
+[project.urls]
+Homepage = "https://github.com/admiral-cs/license-comply"
+Issues = "https://github.com/admiral-cs/license-comply/issues"
+
+# --- Setuptools Configuration ---
+# Tell setuptools where to find our Python code.
+# The "where = ['src']" means our packages live inside the src/ directory.
+# This is called the "src layout" — it's a best practice that prevents
+# accidentally importing your local code instead of the installed version.
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Tell setuptools to include non-Python files (YAML and Jinja2 templates)
+# when building the package. Without this, the knowledge base and templates
+# wouldn't be included in the installed package.
+[tool.setuptools.package-data]
+license_comply = [
+    "knowledge/*.yaml",
+    "templates/*.jinja2",
+]
+
+# --- Ruff Configuration ---
+# Ruff is our linter (checks for code quality issues) and formatter
+# (automatically formats code to be consistent).
+[tool.ruff]
+target-version = "py39"      # Check compatibility with Python 3.9
+line-length = 100            # Max line length (PEP 8 says 79, but 100 is more practical)
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors (basic style issues)
+    "F",    # pyflakes (unused imports, undefined names, etc.)
+    "I",    # isort (import sorting)
+    "W",    # pycodestyle warnings
+]
+
+# --- Coverage Configuration ---
+# These sections configure coverage.py (used by pytest-cov) to measure
+# which lines of our code actually get executed during tests.
+
+[tool.coverage.run]
+source = ["src/license_comply"]          # Only measure our code, not dependencies
+omit = ["src/license_comply/__main__.py"]  # Skip trivial entry point
+
+[tool.coverage.report]
+show_missing = true          # Show uncovered line numbers in the terminal report
+skip_empty = true            # Don't report on empty __init__.py files
+fail_under = 0               # Don't fail on low coverage (we'll set a threshold later)
+
+# --- Pytest Configuration ---
+[tool.pytest.ini_options]
+testpaths = ["tests"]        # Where pytest looks for tests
+# addopts runs these flags automatically on every pytest invocation:
+#   --cov=src/license_comply  → measure coverage of our source code
+#   --cov-report=term-missing → show uncovered line numbers in terminal output
+addopts = "--cov=src/license_comply --cov-report=term-missing"

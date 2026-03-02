@@ -1,0 +1,33 @@
+# demo/requirements.txt
+# A sample project with a mix of licenses for demonstration purposes.
+#
+# NOTE: This demo also includes a pyproject.toml with the same dependencies.
+# The scanner reads pyproject.toml first, so this file acts as a fallback.
+# Having both formats demonstrates that license-comply handles either one.
+#
+# This file showcases license-comply's ability to detect different license
+# types and risk levels. Run it with:
+#
+#   license-comply ./demo --project-type proprietary
+#
+# You should see a mix of clean, warning, and critical findings.
+
+# --- Permissive licenses (should all be CLEAN) ---
+# These are the "easy" licenses — minimal restrictions, safe for any project type.
+requests==2.31.0          # Apache-2.0 — permissive with patent grant
+flask==3.0.0              # BSD-3-Clause — permissive with non-endorsement clause
+click==8.1.7              # BSD-3-Clause — permissive (same as Flask, both from Pallets)
+pydantic==2.5.0           # MIT — the most common permissive license
+
+# --- Weak copyleft (should generate WARNING for proprietary projects) ---
+# Copyleft applies to the library itself, not your whole project.
+chardet==5.2.0            # LGPL-2.1 — weak copyleft, needs care with modifications
+
+# --- Strong copyleft (should generate CRITICAL for proprietary projects) ---
+# The "viral" licenses — incompatible with proprietary projects via the
+# compatibility matrix (strong copyleft + proprietary = critical).
+pylint==3.2.0             # GPL-2.0 — strong copyleft, incompatible with proprietary
+
+# --- AGPL (should generate CRITICAL for proprietary projects) ---
+# AGPL's network clause makes it incompatible with most commercial use.
+searx==1.0.0              # AGPL-3.0 — strong copyleft, incompatible with proprietary
