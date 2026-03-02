@@ -69,19 +69,14 @@ The knowledge base is grounded in open-source licensing principles, not a develo
 ## Quick Start
 
 ```bash
-git clone https://github.com/admiral-cs/license-comply.git
-cd license-comply
-python -m venv .venv
-source .venv/bin/activate
-pip install .
+pip install license-comply
 
-# Try it on the included demo project
-license-comply ./demo --project-type proprietary
+# Scan your project
+license-comply /path/to/your/project --project-type proprietary
 ```
 
-> **Note:** Not yet published to PyPI — install from source as shown above.
->
-> Replace `./demo` with a path to your own project to scan its dependencies.
+> Replace the path with your own project directory. The tool looks for `pyproject.toml`
+> or `requirements.txt` to find your dependencies.
 
 ## Example Output
 
@@ -177,24 +172,18 @@ YOUR OBLIGATIONS
 
 ## Installation
 
-> **Note:** Not yet published to PyPI — install from source as shown above.
-
 **Requires Python 3.9 or later.** Check with `python3 --version`. CI tests run on Python 3.9, 3.10, 3.11, and 3.12.
 
-### Basic install
+### From PyPI (recommended)
 
 ```bash
-git clone https://github.com/admiral-cs/license-comply.git
-cd license-comply
-python -m venv .venv
-source .venv/bin/activate
-pip install .
+pip install license-comply
 ```
 
 ### With AI summary support
 
 ```bash
-pip install ".[ai]"
+pip install "license-comply[ai]"
 ```
 
 This installs the `anthropic` and `openai` Python packages. You'll also need an API key — set one of these environment variables:
@@ -204,9 +193,13 @@ export ANTHROPIC_API_KEY="your-key-here"   # For Claude (default)
 export OPENAI_API_KEY="your-key-here"      # For OpenAI
 ```
 
-### For development
+### From source (for development)
 
 ```bash
+git clone https://github.com/admiral-cs/license-comply.git
+cd license-comply
+python -m venv .venv
+source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
