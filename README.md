@@ -388,7 +388,7 @@ license-comply is Python-focused today. Planned for future releases:
 
 ## Versioning
 
-This project follows [Semantic Versioning](https://semver.org/). The current release is **v1.0.0**.
+This project follows [Semantic Versioning](https://semver.org/). See the [CHANGELOG](https://github.com/admiral-cs/license-comply/blob/main/CHANGELOG.md) for release history and [PyPI](https://pypi.org/project/license-comply/) for the latest version.
 
 ## Contributing
 
