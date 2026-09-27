@@ -38,6 +38,10 @@ license-comply-report.*
 # Local development config
 CLAUDE.md
 
+# Environment files — API keys for the optional AI summary must never be committed
+.env
+.env.*
+
 # Internal design specification (not for public distribution)
 license-comply-spec.md
 

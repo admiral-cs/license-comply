@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Package license metadata now uses a PEP 639 SPDX expression (`license = "Apache-2.0"`), so PyPI publishes a `License-Expression` field; the deprecated TOML-table form and `License ::` classifier are removed (setuptools drops support for them on 2027-02-18)
+- Building the package now requires setuptools 77.0.0 or newer
+
 ## [1.0.1] - 2026-03-02
 
 ### Fixed
